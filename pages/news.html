@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SoundSeeker · Encuentra tu sonido — Huechuraba</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="../css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-opacity-75 bg-black border-bottom border-secondary fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="../index.html"><i class="bi bi-music-note-beamed me-2"></i>SoundSeeker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" data-nav="home" href="../index.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="about" href="../pages/about.html">Nosotros</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="tutores" href="../pages/tutores.html">Tutores</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="instrumentos" href="../pages/instrumentos.html">Instrumentos</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="pedales" href="../pages/pedales.html">Pedales</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="news" href="../pages/news.html">Noticias</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Cuenta</a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="../pages/login.html">Login</a></li>
+            <li><a class="dropdown-item" href="../pages/register.html">Registro</a></li>
+            <li><a class="dropdown-item" href="../pages/cuenta.html">Mi cuenta</a></li>
+            <li><a class="dropdown-item" href="../pages/publicar.html">Publicar</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main class="container" style="padding-top:5.5rem">
+
+<nav style="--bs-breadcrumb-divider: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%278%27 height=%278%27%3E%3Cpath d=%27M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z%27 fill=%27%236c757d%27/%3E%3C/svg%3E');" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Noticias</li>
+  </ol>
+</nav>
+
+<section class="py-4">
+  <div class="p-3 p-lg-4 card-dark hover-lift fade-up">
+    <h1 class="h4 mb-3">Noticias</h1>
+    
+<div class="row g-3">
+  <div class="col-12 col-md-4"><div class="card-dark p-3 h-100 hover-lift"><img src="../img/news/1.jpg" alt="Noticia 1" style="aspect-ratio:4/3;object-fit:cover"><h3 class="h6 mt-2">Clínica de guitarras vintage</h3><p class="text-secondary small">Equipos descontinuados y su integración.</p><a class="btn btn-sm btn-outline-light" href="#">Leer más</a></div></div>
+  <div class="col-12 col-md-4"><div class="card-dark p-3 h-100 hover-lift"><img src="../img/news/2.jpg" alt="Noticia 2" style="aspect-ratio:4/3;object-fit:cover"><h3 class="h6 mt-2">Piloto Huechuraba</h3><p class="text-secondary small">Conexión de alumnos con profesores locales.</p><a class="btn btn-sm btn-outline-light" href="#">Leer más</a></div></div>
+  <div class="col-12 col-md-4"><div class="card-dark p-3 h-100 hover-lift"><img src="../img/news/3.jpg" alt="Noticia 3" style="aspect-ratio:4/3;object-fit:cover"><h3 class="h6 mt-2">Pedales que marcaron época</h3><p class="text-secondary small">Reverb, delay y overdrive icónicos.</p><a class="btn btn-sm btn-outline-light" href="#">Leer más</a></div></div>
+</div>
+
+  </div>
+</section>
+
+</main>
+<footer class="border-top border-secondary mt-5 py-4">
+  <div class="container small text-secondary d-flex flex-wrap gap-2 justify-content-between">
+    <span>© 2025 SoundSeeker</span>
+    <div class="d-flex gap-3">
+      <a class="link-secondary" href="/pages/terminos.html">Términos</a>
+      <a class="link-secondary" href="/pages/faq.html">FAQ</a>
+      <a class="link-secondary" href="/pages/ayuda.html">Ayuda</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+(function(){
+  var key = 'news';
+  var el = document.querySelector('[data-nav="'+key+'"]');
+  if(el) el.classList.add('active');
+})();
+</script>
+</body>
+</html>

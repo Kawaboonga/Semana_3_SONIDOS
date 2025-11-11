@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Glitch & Meeples — Catálogo de Juegos</title>
+  <meta name="description" content="Catálogo de juegos de mesa de una PYME ficticia, desarrollado con Bootstrap. Incluye categorías, fichas de productos, navegación interna, animaciones CSS y diseño responsive." />
+  <!-- Bootstrap 5.3 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Bootstrap Icons (opcional para adornos) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    /* =============================
+       VARIABLES + THEME
+       ============================= */
+    :root {
+      --brand-1: #0f172a;    /* slate-900 */
+      --brand-2: #1e293b;    /* slate-800 */
+      --accent:  #8b5cf6;    /* violet-500 */
+      --accent-2:#22d3ee;    /* cyan-400 */
+      --ok:      #22c55e;    /* green-500 */
+      --warn:    #f59e0b;    /* amber-500 */
+      --danger:  #ef4444;    /* red-500 */
+      --text:    #e5e7eb;    /* gray-200 */
+      --muted:   #94a3b8;    /* slate-400 */
+      --card:    #111827;    /* gray-900 */
+      --card-2:  #0b1220;    /* deep */
+      --shadow:  0 10px 30px rgba(0,0,0,.35);
+      --radius-xl: 1.25rem;
+      --radius-lg: .85rem;
+      --radius-md: .65rem;
+    }
+
+    body { background: linear-gradient(180deg, var(--brand-1), var(--brand-2)); color: var(--text); }
+
+    /* =============================
+       ANIMACIONES (4+ requeridas)
+       ============================= */
+    @keyframes sheen {
+      0% { background-position:-200% 0; }
+      100% { background-position:200% 0; }
+    }
+    .brand-sheen {
+      background: linear-gradient(90deg, var(--text), var(--accent), var(--accent-2), var(--text));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      background-size: 300% 100%; animation: sheen 6s linear infinite;
+    }
+
+    @keyframes fadeUp { from {opacity:0; transform: translateY(16px);} to {opacity:1; transform: translateY(0);} }
+    .fade-up { opacity:0; animation: fadeUp .8s ease-out .15s forwards; }
+
+    .hover-lift { transition: transform .25s ease, box-shadow .25s ease; }
+    .hover-lift:hover { transform: translateY(-6px) scale(1.01); box-shadow: var(--shadow); }
+
+    @keyframes pulseBadge { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.08);} }
+    .badge-pulse { animation: pulseBadge 1.2s ease-in-out infinite; transform-origin: center; }
+
+    /* =============================
+       COMPONENTES
+       ============================= */
+    .nav-blur { backdrop-filter: saturate(120%) blur(10px); background: rgba(17,24,39,.65); }
+    .hero { background: radial-gradient(1200px 400px at 20% -10%, rgba(139,92,246,.25), transparent), radial-gradient(900px 360px at 80% 10%, rgba(34,211,238,.18), transparent); }
+
+    .category-tile { border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, var(--card), var(--card-2)); border-radius: var(--radius-xl); overflow:hidden; }
+    .category-img { aspect-ratio: 16/9; object-fit: cover; }
+
+    .game-card { border:1px solid rgba(255,255,255,.08); border-radius: var(--radius-lg); overflow:hidden; background: linear-gradient(180deg, #0d1323, #0b111e); }
+    .game-img { aspect-ratio: 4/3; object-fit: cover; }
+
+    .price { font-weight: 700; }
+    .price del { color: var(--muted); font-weight: 500; margin-right: .35rem; }
+
+    .section-anchor { scroll-margin-top: 6rem; }
+
+    /* Breadcrumbs / atajos internos */
+    .crumbs a { text-decoration: none; }
+
+    /* =============================
+       MEDIA QUERIES (RESPONSIVE)
+       ============================= */
+    @media (max-width: 575.98px) {
+      .display-5 { font-size: 1.9rem; }
+      .lead { font-size: 1.0rem; }
+    }
+    @media (min-width: 992px) {
+      .xl-cols-5 > * { width: 20%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg fixed-top nav-blur border-bottom border-secondary-subtle">
+    <div class="container">
+      <a class="navbar-brand fw-bold brand-sheen" href="#inicio">
+        <i class="bi bi-dice-5 me-2"></i>Glitch & Meeples
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#categorias">Categorías</a></li>
+          <li class="nav-item"><a class="nav-link" href="#misterio">Misterio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#scifi">Sci‑Fi</a></li>
+          <li class="nav-item"><a class="nav-link" href="#horror">Horror</a></li>
+          <li class="nav-item"><a class="nav-link" href="#familia">Familia</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO / INICIO -->
+  <header id="inicio" class="hero pt-5">
+    <div class="container py-5">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-7 fade-up">
+          <span class="badge rounded-pill text-bg-dark border border-light-subtle mb-3">PYME Chilena · Catálogo 2025</span>
+          <h1 class="display-5 fw-extrabold">Explora mundos, resuelve enigmas y <span class="brand-sheen">juega en familia</span></h1>
+          <p class="lead mt-3 text-secondary">Somos <strong>Glitch & Meeples</strong>, tu tienda boutique de juegos de mesa. Descubre nuestras categorías y encuentra tu próximo favorito.</p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#categorias" class="btn btn-primary"><i class="bi bi-grid-3x3-gap me-1"></i> Ver categorías</a>
+            <a href="#contacto" class="btn btn-outline-light">Contacto</a>
+          </div>
+        </div>
+        <div class="col-lg-5 text-center mt-4 mt-lg-0 fade-up">
+          <i class="bi bi-controller display-1 d-block"></i>
+          <p class="text-secondary mb-0">Despachos a todo Chile · Pagos seguros</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CATEGORÍAS -->
+  <section id="categorias" class="section-anchor py-5">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h3 m-0">Categorías</h2>
+        <nav class="crumbs small text-secondary">
+          <a href="#inicio" class="me-2"><i class="bi bi-house"></i> Inicio</a> / <span class="ms-2">Categorías</span>
+        </nav>
+      </div>
+
+      <div class="row g-4">
+        <!-- Misterio -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="category-tile hover-lift h-100">
+            <img class="w-100 category-img" src="https://picsum.photos/seed/mystery/640/360" alt="Misterio"/>
+            <div class="p-3">
+              <h3 class="h5 mb-2">Misterio</h3>
+              <p class="mb-3 text-secondary">Deduce, investiga y conecta pistas.</p>
+              <a class="btn btn-sm btn-outline-light" href="#misterio">Ver juegos</a>
+            </div>
+          </article>
+        </div>
+        <!-- Sci‑Fi -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="category-tile hover-lift h-100">
+            <img class="w-100 category-img" src="https://picsum.photos/seed/scifi/640/360" alt="Ciencia Ficción"/>
+            <div class="p-3">
+              <h3 class="h5 mb-2">Sci‑Fi</h3>
+              <p class="mb-3 text-secondary">Naves, planetas y tecnología futurista.</p>
+              <a class="btn btn-sm btn-outline-light" href="#scifi">Ver juegos</a>
+            </div>
+          </article>
+        </div>
+        <!-- Horror -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="category-tile hover-lift h-100">
+            <img class="w-100 category-img" src="https://picsum.photos/seed/horror/640/360" alt="Horror"/>
+            <div class="p-3">
+              <h3 class="h5 mb-2">Horror</h3>
+              <p class="mb-3 text-secondary">Tensión, criaturas y supervivencia.</p>
+              <a class="btn btn-sm btn-outline-light" href="#horror">Ver juegos</a>
+            </div>
+          </article>
+        </div>
+        <!-- Familia -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="category-tile hover-lift h-100">
+            <img class="w-100 category-img" src="https://picsum.photos/seed/family/640/360" alt="Familia"/>
+            <div class="p-3">
+              <h3 class="h5 mb-2">Familia</h3>
+              <p class="mb-3 text-secondary">Risas rápidas y fáciles de aprender.</p>
+              <a class="btn btn-sm btn-outline-light" href="#familia">Ver juegos</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: MISTERIO -->
+  <section id="misterio" class="section-anchor py-5">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h4 m-0">Misterio</h2>
+        <nav class="crumbs small text-secondary">
+          <a href="#inicio" class="me-2"><i class="bi bi-house"></i> Inicio</a> /
+          <a href="#categorias" class="ms-2">Categorías</a>
+        </nav>
+      </div>
+
+      <div class="row g-4">
+        <!-- Juego 1 -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/mystery1/640/480" alt="Sombras de Arkham" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Sombras de Arkham</h3>
+                <span class="badge text-bg-success badge-pulse">10% OFF</span>
+              </div>
+              <p class="small text-secondary">Investiga casos paranormales con mecánicas de deducción cooperativa.</p>
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="price"><del>$28.990</del> $25.990</span>
+              </div>
+              <a class="btn btn-sm btn-primary" href="#categorias">Volver a categorías</a>
+            </div>
+          </article>
+        </div>
+        <!-- Juego 2 -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.1s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/mystery2/640/480" alt="Crónicas del Detective" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Crónicas del Detective</h3>
+                <span class="badge text-bg-secondary">Sin descuento</span>
+              </div>
+              <p class="small text-secondary">Conecta pistas y resuelve casos en sesiones de 60 minutos.</p>
+              <div class="price">$22.990</div>
+              <a class="btn btn-sm btn-primary" href="#scifi">Ir a Sci‑Fi</a>
+            </div>
+          </article>
+        </div>
+        <!-- Juego 3 -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.2s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/mystery3/640/480" alt="El Código del Faraón" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">El Código del Faraón</h3>
+                <span class="badge text-bg-success">5% OFF</span>
+              </div>
+              <p class="small text-secondary">Descifra jeroglíficos, evita trampas y escapa de la tumba.</p>
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="price"><del>$19.990</del> $18.990</span>
+              </div>
+              <a class="btn btn-sm btn-outline-light" href="#inicio">Volver al inicio</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: SCI‑FI -->
+  <section id="scifi" class="section-anchor py-5">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h4 m-0">Sci‑Fi</h2>
+        <nav class="crumbs small text-secondary">
+          <a href="#inicio" class="me-2"><i class="bi bi-house"></i> Inicio</a> /
+          <a href="#categorias" class="ms-2">Categorías</a>
+        </nav>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/scifi1/640/480" alt="Colonos Galácticos" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Colonos Galácticos</h3>
+                <span class="badge text-bg-success">15% OFF</span>
+              </div>
+              <p class="small text-secondary">Explora planetas y gestiona recursos en un 4X accesible.</p>
+              <div class="price"><del>$34.990</del> $29.740</div>
+              <a class="btn btn-sm btn-primary" href="#horror">Ir a Horror</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.1s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/scifi2/640/480" alt="Neón: Carrera Estelar" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Neón: Carrera Estelar</h3>
+                <span class="badge text-bg-secondary">Sin descuento</span>
+              </div>
+              <p class="small text-secondary">Carreas interplanetarias con motor de cartas y push-your-luck.</p>
+              <div class="price">$26.990</div>
+              <a class="btn btn-sm btn-outline-light" href="#categorias">Volver a categorías</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.2s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/scifi3/640/480" alt="Terraformadores" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Terraformadores</h3>
+                <span class="badge text-bg-success">20% OFF</span>
+              </div>
+              <p class="small text-secondary">Convierte mundos hostiles en hábitats prósperos.</p>
+              <div class="price"><del>$39.990</del> $31.990</div>
+              <a class="btn btn-sm btn-primary" href="#familia">Ir a Familia</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: HORROR -->
+  <section id="horror" class="section-anchor py-5">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h4 m-0">Horror</h2>
+        <nav class="crumbs small text-secondary">
+          <a href="#inicio" class="me-2"><i class="bi bi-house"></i> Inicio</a> /
+          <a href="#categorias" class="ms-2">Categorías</a>
+        </nav>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/horror1/640/480" alt="Ecos de la Mansión" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Ecos de la Mansión</h3>
+                <span class="badge text-bg-secondary">Sin descuento</span>
+              </div>
+              <p class="small text-secondary">Cooperativo de exploración con eventos impredecibles.</p>
+              <div class="price">$27.990</div>
+              <a class="btn btn-sm btn-outline-light" href="#categorias">Volver a categorías</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.1s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/horror2/640/480" alt="Niebla Profunda" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Niebla Profunda</h3>
+                <span class="badge text-bg-success">12% OFF</span>
+              </div>
+              <p class="small text-secondary">Supervivencia contra criaturas en la oscuridad.</p>
+              <div class="price"><del>$31.990</del> $28.150</div>
+              <a class="btn btn-sm btn-primary" href="#familia">Ir a Familia</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.2s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/horror3/640/480" alt="El Rito" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">El Rito</h3>
+                <span class="badge text-bg-secondary">Sin descuento</span>
+              </div>
+              <p class="small text-secondary">Dilemas morales y gestión de riesgos en sesiones cortas.</p>
+              <div class="price">$23.990</div>
+              <a class="btn btn-sm btn-outline-light" href="#inicio">Volver al inicio</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: FAMILIA -->
+  <section id="familia" class="section-anchor py-5">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h4 m-0">Familia</h2>
+        <nav class="crumbs small text-secondary">
+          <a href="#inicio" class="me-2"><i class="bi bi-house"></i> Inicio</a> /
+          <a href="#categorias" class="ms-2">Categorías</a>
+        </nav>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/family1/640/480" alt="Colores Locos" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Colores Locos</h3>
+                <span class="badge text-bg-success">8% OFF</span>
+              </div>
+              <p class="small text-secondary">Velocidad mental con reglas simples para todas las edades.</p>
+              <div class="price"><del>$14.990</del> $13.790</div>
+              <a class="btn btn-sm btn-outline-light" href="#categorias">Volver a categorías</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.1s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/family2/640/480" alt="Gran Picnic" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Gran Picnic</h3>
+                <span class="badge text-bg-secondary">Sin descuento</span>
+              </div>
+              <p class="small text-secondary">Set collection ágil con cartas ilustradas.</p>
+              <div class="price">$12.990</div>
+              <a class="btn btn-sm btn-primary" href="#misterio">Ir a Misterio</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="game-card hover-lift h-100 fade-up" style="animation-delay:.2s">
+            <img class="w-100 game-img" src="https://picsum.photos/seed/family3/640/480" alt="Torres de Risas" />
+            <div class="p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="h6 m-0">Torres de Risas</h3>
+                <span class="badge text-bg-success">5% OFF</span>
+              </div>
+              <p class="small text-secondary">Destreza y equilibrio para partidas express.</p>
+              <div class="price"><del>$15.990</del> $15.190</div>
+              <a class="btn btn-sm btn-outline-light" href="#inicio">Volver al inicio</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO / FOOTER -->
+  <section id="contacto" class="py-5 border-top border-secondary-subtle">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+          <h2 class="h4">Contacto</h2>
+          <p class="text-secondary">¿Dudas o quieres cotizar por mayor? Escríbenos: <a href="mailto:hola@glitchmeeples.cl">hola@glitchmeeples.cl</a></p>
+          <ul class="list-unstyled small text-secondary">
+            <li><i class="bi bi-geo me-1"></i> Huechuraba, Santiago · Chile</li>
+            <li><i class="bi bi-truck me-1"></i> Envíos a todo Chile</li>
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <div class="p-3 rounded-4" style="background:#0c1425;border:1px solid rgba(255,255,255,.08)">
+            <div class="row g-2">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Nombre</label>
+                <input class="form-control" placeholder="Tu nombre" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" placeholder="tu@email.com" />
+              </div>
+              <div class="col-12">
+                <label class="form-label">Mensaje</label>
+                <textarea class="form-control" rows="3" placeholder="Hola, quiero consultar por..."></textarea>
+              </div>
+              <div class="col-12 d-grid d-sm-flex gap-2">
+                <button class="btn btn-primary"><i class="bi bi-send me-1"></i>Enviar</button>
+                <a href="#inicio" class="btn btn-outline-light"><i class="bi bi-arrow-up"></i> Volver arriba</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center pt-4 mt-4 border-top border-secondary-subtle small text-secondary">
+        © 2025 Glitch & Meeples — Sitio demostrativo educativo (Bootstrap 5.3)
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
