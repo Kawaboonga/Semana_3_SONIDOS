@@ -1,0 +1,528 @@
+<!-- /pages/tutor.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Perfil del Tutor · SoundSeeker</title>
+
+  <meta name="description" content="Perfil de tutor: información, disponibilidad, cursos, equipo y reseñas en SoundSeeker.">
+  <meta name="theme-color" content="#0b0d10">
+
+  <!-- CDNs -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Estilos proyecto -->
+  <link href="../css/styles.css" rel="stylesheet">
+
+  <style>
+    .hero-compact {
+      background: radial-gradient(60% 80% at 50% 0%, rgba(139,92,246,0.15), rgba(34,211,238,0.06) 60%, transparent 100%),
+                  linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      margin-top:56px; /* debajo del navbar fijo */
+    }
+    .avatar {
+      width: 96px; height:96px; border-radius: 50%;
+      object-fit: cover; border: 2px solid rgba(255,255,255,.2);
+    }
+    .muted { color:#94a3b8; }
+    .badge-soft { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); }
+    .card-dark { background:#0b1220; border:1px solid rgba(255,255,255,.08); border-radius:.85rem; }
+    .divider { height:1px; background: linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent); margin: .75rem 0 1rem; }
+
+    .sticky-cta {
+      position: sticky; top: 88px;
+      background:#0b1220; border:1px solid rgba(255,255,255,.12); border-radius: .85rem;
+    }
+
+    /* Tabs */
+    .nav-pills .nav-link { border:1px solid rgba(255,255,255,.15); background:transparent; }
+    .nav-pills .nav-link.active { background:#0b1584; border-color:#0b1584; }
+
+    /* Galería equipo */
+    .gear-thumb { aspect-ratio: 4/3; background-size:cover; background-position:center; border-radius:.65rem; border:1px solid rgba(255,255,255,.1); }
+
+    /* Animaciones suaves */
+    @media (prefers-reduced-motion:no-preference){
+      .fade-up { opacity:0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+      .fade-up.is-visible { opacity:1; transform:none; }
+      .hover-lift { transition: transform .2s ease, box-shadow .2s ease; }
+      .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    }
+  </style>
+</head>
+<body class="bg-dark text-light">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-opacity-75 bg-black border-bottom border-secondary fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="../index.html"><i class="bi bi-music-note-beamed me-2"></i>SoundSeeker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" data-nav="home" href="../index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="about" href="./about.html">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" data-nav="tutores" href="./tutores.html">Tutores</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="instrumentos" href="./instrumentos.html">Instrumentos</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="pedales" href="./pedales.html">Pedales</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="news" href="./news.html">Noticias</a></li>
+
+          <!-- visible solo para invitados -->
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./login.html">Login</a></li>
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./register.html">Registro</a></li>
+
+          <!-- visible para user y admin -->
+          <li class="nav-item" data-guard="user"><a class="nav-link" href="./cuenta.html">Mi cuenta</a></li>
+
+          <!-- visible solo para admin -->
+          <li class="nav-item" data-guard="admin"><a class="nav-link" href="./publicar.html">Publicar</a></li>
+
+          <!-- badge usuario -->
+          <li class="nav-item"><span class="nav-link disabled small">👤 <span data-user-badge>Visitante</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO compacto -->
+  <header class="hero-compact">
+    <div class="container py-4">
+      <nav aria-label="breadcrumb" class="small">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a class="link-secondary" href="../index.html">Inicio</a></li>
+          <li class="breadcrumb-item"><a class="link-secondary" href="./tutores.html">Tutores</a></li>
+          <li class="breadcrumb-item active text-light" aria-current="page">Perfil</li>
+        </ol>
+      </nav>
+
+      <div class="d-flex align-items-center gap-3">
+        <img id="tutorAvatar" class="avatar" src="../img/tutores/placeholder.jpg" alt="Avatar del tutor">
+        <div>
+          <h1 id="tutorNombre" class="h3 mb-1">Nombre del Tutor</h1>
+          <div class="small muted" id="tutorResumen">Instrumento · Estilos · Modalidad</div>
+          <div class="mt-2">
+            <span id="tutorRating" class="me-2"></span>
+            <span class="badge badge-soft rounded-pill"><i class="bi bi-geo me-1"></i><span id="tutorComuna">Huechuraba</span></span>
+            <span class="badge badge-soft rounded-pill"><i class="bi bi-shield-check me-1"></i> Verificado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="container py-4">
+    <div class="row g-4">
+      <!-- Contenido principal -->
+      <div class="col-12 col-lg-8">
+        <!-- Tabs -->
+        <ul class="nav nav-pills gap-2 mb-3" id="perfilTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-perfil" data-bs-toggle="pill" data-bs-target="#pane-perfil" type="button" role="tab">Perfil</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-cursos" data-bs-toggle="pill" data-bs-target="#pane-cursos" type="button" role="tab">Cursos</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-reseñas" data-bs-toggle="pill" data-bs-target="#pane-reseñas" type="button" role="tab">Reseñas</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-equipo" data-bs-toggle="pill" data-bs-target="#pane-equipo" type="button" role="tab">Equipo</button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- PERFIL -->
+          <section class="tab-pane fade show active" id="pane-perfil" role="tabpanel" aria-labelledby="tab-perfil">
+            <article class="card-dark p-3 p-lg-4 fade-up">
+              <h2 class="h5">Acerca del tutor</h2>
+              <p id="tutorBio" class="mb-2 muted">—</p>
+              <div class="divider"></div>
+
+              <div class="row g-3">
+                <div class="col-6 col-md-4">
+                  <div class="small muted">Instrumentos</div>
+                  <div id="tutorInstrumentos">—</div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="small muted">Estilos</div>
+                  <div id="tutorEstilos">—</div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="small muted">Modalidad</div>
+                  <div id="tutorModalidad">—</div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="small muted">Idiomas</div>
+                  <div id="tutorIdiomas">—</div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="small muted">Experiencia</div>
+                  <div id="tutorExperiencia">—</div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="small muted">Formación</div>
+                  <div id="tutorFormacion">—</div>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <h3 class="h6">Disponibilidad semanal</h3>
+              <div id="tutorDisponibilidad" class="d-flex flex-wrap gap-2"></div>
+            </article>
+          </section>
+
+          <!-- CURSOS -->
+          <section class="tab-pane fade" id="pane-cursos" role="tabpanel" aria-labelledby="tab-cursos">
+            <div id="listaCursos" class="row g-3"></div>
+          </section>
+
+          <!-- RESEÑAS -->
+          <section class="tab-pane fade" id="pane-reseñas" role="tabpanel" aria-labelledby="tab-reseñas">
+            <div id="listaReseñas" class="d-flex flex-column gap-3"></div>
+          </section>
+
+          <!-- EQUIPO -->
+          <section class="tab-pane fade" id="pane-equipo" role="tabpanel" aria-labelledby="tab-equipo">
+            <div id="listaEquipo" class="row g-3"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Sidebar CTA -->
+      <aside class="col-12 col-lg-4">
+        <div class="sticky-cta p-3 p-lg-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="small muted">Precio por hora</div>
+            <div id="tutorPrecio" class="h4 mb-0">$—</div>
+          </div>
+          <div class="divider"></div>
+          <div class="small muted mb-1"><i class="bi bi-geo me-1"></i><span id="tutorDireccion">—</span></div>
+          <div class="small muted mb-3"><i class="bi bi-wifi me-1"></i><span id="tutorModalidades">—</span></div>
+
+          <div class="d-grid gap-2">
+            <!-- Invitado: ir a login -->
+            <a class="btn btn-outline-light" data-guard="guest" href="./login.html"><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión</a>
+            <!-- Usuario: reservar -->
+            <button class="btn btn-primary" data-guard="user" id="btnReservar"><i class="bi bi-calendar-check me-1"></i> Reservar clase</button>
+            <!-- Mensaje directo -->
+            <button class="btn btn-secondary" data-guard="user" id="btnMensaje"><i class="bi bi-chat-dots me-1"></i> Enviar mensaje</button>
+          </div>
+
+          <div class="divider"></div>
+          <div class="d-flex gap-2">
+            <a id="tutorLinkIG" class="btn btn-sm btn-outline-light" target="_blank" rel="noopener"><i class="bi bi-instagram"></i></a>
+            <a id="tutorLinkYT" class="btn btn-sm btn-outline-light" target="_blank" rel="noopener"><i class="bi bi-youtube"></i></a>
+            <a id="tutorLinkWA" class="btn btn-sm btn-outline-light" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-top border-secondary mt-5 py-4">
+    <div class="container small text-secondary d-flex flex-wrap gap-2 justify-content-between">
+      <span>© 2025 SoundSeeker</span>
+      <div class="d-flex gap-3">
+        <a class="link-secondary" href="./terminos.html">Términos</a>
+        <a class="link-secondary" href="./faq.html">FAQ</a>
+        <a class="link-secondary" href="./ayuda.html">Ayuda</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Reserva -->
+  <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form class="modal-content card-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalReservaLabel"><i class="bi bi-calendar-check me-1"></i> Reservar clase</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small">Fecha</label>
+            <input type="date" id="resFecha" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small">Hora</label>
+            <input type="time" id="resHora" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small">Duración (horas)</label>
+            <input type="number" id="resDuracion" class="form-control" value="1" min="1" max="4" step="1">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small">Modalidad</label>
+            <select id="resModalidad" class="form-select">
+              <option value="presencial">Presencial</option>
+              <option value="online">Online</option>
+              <option value="mixto">Mixto</option>
+            </select>
+          </div>
+          <div class="small muted">Total estimado: <strong id="resTotal">$—</strong></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i> Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/storage.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  // ---------- Demo dataset (reemplaza por tu API cuando quieras) ----------
+  const TUTORES = [
+    {
+      id: 't1',
+      nombre: 'Marco Vidal',
+      avatar: '../img/tutores/marco.jpg',
+      comuna: 'Huechuraba',
+      instrumentos: ['Guitarra eléctrica', 'Guitarra acústica'],
+      estilos: ['Rock', 'Blues', 'Indie'],
+      modalidades: ['presencial', 'online'],
+      idiomas: ['Español', 'Inglés'],
+      experiencia: '8 años de docencia, sesionista en vivo.',
+      formacion: 'Intérprete Mención Guitarra — Projazz.',
+      bio: 'Clases centradas en objetivos reales del alumno: repertorio, técnica útil y oído. Metodología práctica con backing tracks y grabaciones.',
+      precioHora: 25000,
+      direccion: 'Av. Recoleta 5000, Huechuraba',
+      rating: 4.7,
+      redes: {
+        ig: 'https://instagram.com/', yt: 'https://youtube.com/', wa: 'https://wa.me/56911111111'
+      },
+      disponibilidad: [
+        { dia:'Lun', horas:['18:00','19:00'] },
+        { dia:'Mie', horas:['19:00'] },
+        { dia:'Sab', horas:['11:00','12:00'] }
+      ],
+      cursos: [
+        { id:'c1', titulo:'Guitarra Rock de Cero a Riff', duracion_h:10, precio:25000, modalidad:'presencial', thumb:'../img/cursos/gtr-rock.jpg' },
+        { id:'c5', titulo:'Fingerstyle: Texturas y Arpegios', duracion_h:10, precio:28000, modalidad:'online', thumb:'../img/cursos/fingerstyle.jpg' }
+      ],
+      reseñas: [
+        { autor:'Alex', estrellas:5, texto:'Muy claro y paciente. Mejore mi púa alternada en 3 semanas.' },
+        { autor:'Camila', estrellas:4, texto:'Buen material y seguimiento. Recomendado.' }
+      ],
+      equipo: [
+        { nombre:'Fender Player Strat', foto:'../img/equipo/strat.jpg' },
+        { nombre:'Boss Katana 50', foto:'../img/equipo/katana.jpg' },
+        { nombre:'Delay DD-7', foto:'../img/equipo/dd7.jpg' }
+      ]
+    },
+    {
+      id: 't2',
+      nombre: 'Constanza Fuentes',
+      avatar: '../img/tutores/constanza.jpg',
+      comuna: 'Huechuraba',
+      instrumentos: ['Bajo eléctrico'],
+      estilos: ['Funk', 'Pop'],
+      modalidades: ['mixto'],
+      idiomas: ['Español'],
+      experiencia: '6 años. Bajista de sesión y docente.',
+      formacion: 'Lic. Música — U. de Chile.',
+      bio: 'Técnica de slap, groove y lectura rítmica. Clases con enfoque en time feel y dinámica.',
+      precioHora: 35000,
+      direccion: 'Pedro Fontova, Huechuraba',
+      rating: 4.9,
+      redes: { ig:'#', yt:'#', wa:'#' },
+      disponibilidad: [
+        { dia:'Mar', horas:['18:30'] },
+        { dia:'Jue', horas:['19:00','20:00'] }
+      ],
+      cursos: [
+        { id:'c2', titulo:'Slap Intensivo', duracion_h:8, precio:35000, modalidad:'mixto', thumb:'../img/cursos/bass-slap.jpg' }
+      ],
+      reseñas: [
+        { autor:'Nico', estrellas:5, texto:'Mi groove cambió, seco.' }
+      ],
+      equipo: [
+        { nombre:'Music Man StingRay', foto:'../img/equipo/stingray.jpg' }
+      ]
+    }
+  ];
+
+  // ---------- Utilidades ----------
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const fmtCLP = v => new Intl.NumberFormat('es-CL', { style:'currency', currency:'CLP', maximumFractionDigits:0 }).format(v);
+  const getParam = key => new URLSearchParams(location.search).get(key);
+
+  function stars(r){
+    const full = Math.floor(r), half = (r - full) >= 0.5;
+    let html = '';
+    for(let i=0;i<full;i++) html += '<i class="bi bi-star-fill text-warning"></i>';
+    if(half) html += '<i class="bi bi-star-half text-warning"></i>';
+    const rest = 5 - full - (half?1:0);
+    for(let i=0;i<rest;i++) html += '<i class="bi bi-star text-warning"></i>';
+    return `${html} <span class="small muted">(${r.toFixed(1)})</span>`;
+  }
+
+  function pillList(arr){ return arr.map(v=>`<span class="badge badge-soft rounded-pill me-1 mb-1">${v}</span>`).join(''); }
+
+  function renderDisponibilidad(items){
+    if(!items || !items.length) return '<span class="muted">Coordinar con el tutor</span>';
+    return items.map(d => `<span class="badge badge-soft rounded-pill me-1 mb-1">${d.dia}: ${d.horas.join(', ')}</span>`).join('');
+  }
+
+  function renderCursos(cursos){
+    const wrap = $('#listaCursos'); wrap.innerHTML = '';
+    if(!cursos?.length){ wrap.innerHTML = '<div class="muted">Este tutor aún no publica cursos.</div>'; return; }
+    for(const c of cursos){
+      const col = document.createElement('div');
+      col.className = 'col-12 col-md-6';
+      col.innerHTML = `
+        <article class="card-dark hover-lift h-100 d-flex">
+          <div class="row g-0 w-100">
+            <div class="col-5">
+              <div class="gear-thumb h-100" style="background-image:url('${c.thumb||'../img/cursos/placeholder.jpg'}')"></div>
+            </div>
+            <div class="col-7 p-3 d-flex flex-column">
+              <h3 class="h6 mb-1">${c.titulo}</h3>
+              <div class="small muted mb-2"><i class="bi bi-clock me-1"></i>${c.duracion_h}h · <i class="bi bi-wifi ms-1 me-1"></i>${c.modalidad}</div>
+              <div class="mt-auto d-flex align-items-center justify-content-between">
+                <div class="fw-bold">${fmtCLP(c.precio)}</div>
+                <a href="./cursos.html#${c.id}" class="btn btn-sm btn-outline-light">Ver curso</a>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+      wrap.appendChild(col);
+    }
+  }
+
+  function renderReseñas(reseñas){
+    const wrap = $('#listaReseñas'); wrap.innerHTML = '';
+    if(!reseñas?.length){ wrap.innerHTML = '<div class="muted">Aún no hay reseñas.</div>'; return; }
+    for(const r of reseñas){
+      const art = document.createElement('article');
+      art.className = 'card-dark p-3';
+      art.innerHTML = `
+        <div class="d-flex align-items-start justify-content-between">
+          <div>
+            <div class="fw-bold">${r.autor}</div>
+            <div class="small">${stars(r.estrellas)}</div>
+          </div>
+        </div>
+        <div class="mt-2">${r.texto}</div>
+      `;
+      wrap.appendChild(art);
+    }
+  }
+
+  function renderEquipo(eq){
+    const wrap = $('#listaEquipo'); wrap.innerHTML = '';
+    if(!eq?.length){ wrap.innerHTML = '<div class="muted">Sin equipo declarado.</div>'; return; }
+    for(const e of eq){
+      const col = document.createElement('div');
+      col.className = 'col-6 col-md-4';
+      col.innerHTML = `
+        <div class="gear-thumb hover-lift" style="background-image:url('${e.foto||'../img/equipo/placeholder.jpg'}')"></div>
+        <div class="small mt-1">${e.nombre}</div>
+      `;
+      wrap.appendChild(col);
+    }
+  }
+
+  function loadTutor(){
+    const id = getParam('id');
+    const tutor = id ? TUTORES.find(t=>t.id===id) : TUTORES[0];
+    if(!tutor){ document.body.innerHTML = '<div class="container py-5">Tutor no encontrado.</div>'; return; }
+
+    // Header
+    $('#tutorAvatar').src = tutor.avatar || '../img/tutores/placeholder.jpg';
+    $('#tutorNombre').textContent = tutor.nombre;
+    $('#tutorComuna').textContent = tutor.comuna;
+    $('#tutorResumen').textContent = `${tutor.instrumentos?.join(' · ')} · ${tutor.estilos?.join(' / ')} · ${tutor.modalidades?.join(', ')}`;
+    $('#tutorRating').innerHTML = stars(tutor.rating||0);
+
+    // Perfil
+    $('#tutorBio').textContent = tutor.bio || '—';
+    $('#tutorInstrumentos').innerHTML = pillList(tutor.instrumentos || []);
+    $('#tutorEstilos').innerHTML = pillList(tutor.estilos || []);
+    $('#tutorModalidad').textContent = tutor.modalidades?.join(', ') || '—';
+    $('#tutorIdiomas').textContent = tutor.idiomas?.join(', ') || '—';
+    $('#tutorExperiencia').textContent = tutor.experiencia || '—';
+    $('#tutorFormacion').textContent = tutor.formacion || '—';
+    $('#tutorDisponibilidad').innerHTML = renderDisponibilidad(tutor.disponibilidad);
+
+    // Sidebar
+    $('#tutorPrecio').textContent = fmtCLP(tutor.precioHora || 0);
+    $('#tutorDireccion').textContent = tutor.direccion || '—';
+    $('#tutorModalidades').textContent = tutor.modalidades?.join(', ') || '—';
+    $('#tutorLinkIG').href = tutor.redes?.ig || '#';
+    $('#tutorLinkYT').href = tutor.redes?.yt || '#';
+    $('#tutorLinkWA').href = tutor.redes?.wa || '#';
+
+    // Tabs
+    renderCursos(tutor.cursos);
+    renderReseñas(tutor.reseñas);
+    renderEquipo(tutor.equipo);
+
+    // Reserva
+    const modal = new bootstrap.Modal(document.getElementById('modalReserva'));
+    $('#btnReservar')?.addEventListener('click', ()=> {
+      const sel = $('#resModalidad');
+      if (tutor.modalidades?.length) {
+        sel.innerHTML = tutor.modalidades.map(m => `<option value="${m}">${m}</option>`).join('');
+      }
+      $('#resDuracion').value = 1;
+      $('#resTotal').textContent = fmtCLP(tutor.precioHora || 0);
+      modal.show();
+    });
+
+    function updateTotal(){
+      const d = Math.max(1, Number($('#resDuracion').value||1));
+      $('#resTotal').textContent = fmtCLP(d * (tutor.precioHora||0));
+    }
+    $('#resDuracion').addEventListener('input', updateTotal);
+
+    document.querySelector('form.modal-content')?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      modal.hide();
+      // Aquí integras API de reservas
+      alert('Reserva solicitada. El tutor te contactará para confirmar.');
+    });
+
+    // Revelar animaciones
+    revealOnScroll();
+  }
+
+  // Revelar .fade-up on view
+  function revealOnScroll(){
+    const els = $$('.fade-up:not(.is-visible)');
+    if (!('IntersectionObserver' in window) || !els.length) {
+      els.forEach(e => e.classList.add('is-visible'));
+      return;
+    }
+    const io = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: .1 });
+    els.forEach(el=>io.observe(el));
+  }
+
+  // Init
+  loadTutor();
+  </script>
+</body>
+</html>

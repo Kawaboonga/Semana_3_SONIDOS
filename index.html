@@ -3,103 +3,381 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SoundSeeker · Encuentra tu sonido — Huechuraba</title>
+  <title>SoundSeeker · Encuentra tu sonido</title>
+
+  <meta name="description" content="SoundSeeker conecta alumnos con tutores de guitarra y bajo en Huechuraba, y facilita la compra/venta de instrumentos, amplificadores y pedales de segunda mano.">
+  <meta name="theme-color" content="#0b0d10">
+
+  <!-- Performance: preconexión CDNs -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <!-- LCP: Preload de imagen hero -->
+  <link rel="preload" as="image" href="./img/home-1/slider2.jpg" fetchpriority="high">
+
+  <!-- Bootstrap y Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Estilos -->
   <link href="./css/styles.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand-1:#0f172a; --brand-2:#1e293b; --accent:#8b5cf6; --accent-2:#22d3ee;
+      --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --text:#e5e7eb; --muted:#94a3b8;
+      --card:#111827; --card-2:#0b1220; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius-xl:1.25rem; --radius-lg:.85rem; --radius-md:.65rem;
+
+      /* Imagen hero (ruta mantenida) */
+      --hero-img:url("./img/home-1/slider2.jpg");
+    }
+
+    /* Entrada suave del documento */
+    body{opacity:0;transition:opacity .8s ease;}
+    body.is-loaded{opacity:1;}
+
+    /* Texto animado */
+    @keyframes sheen{0%{background-position:-200% 0}100%{background-position:200% 0}}
+    .brand-sheen{
+      background:linear-gradient(90deg,var(--text),var(--accent),var(--accent-2),var(--text));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      background-size:300% 100%;animation:sheen 6s linear infinite;
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .fade-up{opacity:0;animation:fadeUp .8s ease-out .15s forwards}
+    .hover-lift{transition:transform .25s ease,box-shadow .25s ease}
+    .hover-lift:hover{transform:translateY(-6px) scale(1.01);box-shadow:var(--shadow)}
+
+    /* HERO base */
+    #sticky-parallax-header{
+      color:#fff;height:100vh;width:100%;
+      background-image:var(--hero-img);
+      background-size:cover;background-position:50% 50%;
+      background-blend-mode:soft-light;
+      display:grid;place-items:center;text-align:center;
+      font-size:clamp(2rem,4vw + 1rem,5rem);
+      isolation:isolate; /* capa ::after por detrás del contenido */
+    }
+
+    /* Degradado inferior (fallback visual) */
+    #sticky-parallax-header::after{
+      content:"";position:absolute;inset:auto 0 0 0;height:42svh;pointer-events:none;
+      background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,.4) 45%,rgba(0,0,0,.85) 100%);
+      z-index:-1;
+    }
+
+    /* Máscara (mejora progresiva) */
+    @supports (mask-image: linear-gradient(#000, transparent)) or (-webkit-mask-image: linear-gradient(#000, transparent)){
+      #sticky-parallax-header::after{background:none}
+      #sticky-parallax-header{
+        -webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);
+                mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);
+        -webkit-mask-size:100% 100%;mask-size:100% 100%;
+      }
+    }
+
+    /* Navbar al hacer scroll */
+    .nav-scroll-opaque{background-color:rgba(0,0,0,.9)!important;backdrop-filter:blur(6px)}
+
+    /* Skip link accesibilidad */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem 1rem;background:#0b1584;color:#fff;border-radius:.5rem;z-index:9999}
+
+    /* -------- Scroll-linked animations (moderno) -------- */
+    @supports (animation-timeline: scroll()) {
+      /* Parallax/shrink existente */
+      @keyframes sticky-parallax-header-move-and-size{
+        from{background-position:50% 0}
+        to{background-position:50% 100%;background-color:#0b1584;height:10svh;font-size:2em}
+      }
+
+      /* Desaparecer contenido del hero (subtítulo + CTAs) */
+      @keyframes hero-fade-out{
+        from{opacity:1;transform:translateY(0)}
+        to{opacity:0;transform:translateY(-30px)}
+      }
+      .hero-fade{
+        animation:hero-fade-out linear both;
+        animation-timeline:scroll();
+        animation-range:60vh 95vh; /* tramo de desvanecimiento de los elementos del hero */
+      }
+
+      /* NUEVO: desvanecer COMPLETO el header (imagen incluida) */
+      @keyframes hero-wrapper-vanish{
+        from{opacity:1}
+        to{opacity:0}
+      }
+
+      /* Dos animaciones simultáneas en el header:
+         1) parallax/shrink 0→90vh
+         2) vanish 65→100vh */
+      #sticky-parallax-header{
+        position:fixed;top:0;left:0;right:0;
+        animation-name:sticky-parallax-header-move-and-size, hero-wrapper-vanish;
+        animation-duration:1s, 1s;                 /* requerido aunque el timeline gobierna */
+        animation-timing-function:linear, linear;
+        animation-fill-mode:forwards, both;
+        animation-timeline:scroll(), scroll();
+        animation-range:0vh 90vh, 65vh 100vh;
+        will-change:opacity, background-position;
+      }
+
+      body{padding-top:100svh;}
+    }
+
+    /* Fallback cuando NO hay scroll-linked animations */
+    @supports not (animation-timeline: scroll()) {
+      #sticky-parallax-header{position:relative;min-height:100svh}
+      body{padding-top:0}
+    }
+
+    /* Micro-animaciones de entrada en secciones */
+    .fade-up{opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease}
+    .fade-up.is-visible{opacity:1;transform:none}
+
+    /* Respeta reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important;transition:none!important}
+    }
+  </style>
 </head>
+
 <body class="bg-dark text-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-opacity-75 bg-black border-bottom border-secondary fixed-top">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="./index.html"><i class="bi bi-music-note-beamed me-2"></i>SoundSeeker</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" data-nav="home" href="./index.html">Inicio</a></li>
-        <li class="nav-item"><a class="nav-link" data-nav="about" href="./pages/about.html">Nosotros</a></li>
-        <li class="nav-item"><a class="nav-link" data-nav="tutores" href="./pages/tutores.html">Tutores</a></li>
-        <li class="nav-item"><a class="nav-link" data-nav="instrumentos" href="./pages/instrumentos.html">Instrumentos</a></li>
-        <li class="nav-item"><a class="nav-link" data-nav="pedales" href="./pages/pedales.html">Pedales</a></li>
-        <li class="nav-item"><a class="nav-link" data-nav="news" href="./pages/news.html">Noticias</a></li>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-opacity-75 bg-black border-bottom border-secondary fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="./index.html"><i class="bi bi-music-note-beamed me-2"></i>SoundSeeker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <!-- visible solo para invitados -->
-            <li class="nav-item" data-guard="guest"><a class="nav-link" href="../pages/login.html">Login</a></li>
-            <li class="nav-item" data-guard="guest"><a class="nav-link" href="../pages/register.html">Registro</a></li>
-            <!-- visible para user y admin -->
-            <li class="nav-item" data-guard="user"><a class="nav-link" href="../pages/cuenta.html">Mi cuenta</a></li>
-            <!-- visible solo para admin -->
-            <li class="nav-item" data-guard="admin"><a class="nav-link" href="../pages/publicar.html">Publicar</a></li>
-            <!-- badge usuario -->
-            <li class="nav-item"><span class="nav-link disabled small">👤 <span data-user-badge>Visitante</span></span></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Cuenta</a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="./pages/login.html">Login</a></li>
-            <li><a class="dropdown-item" href="./pages/register.html">Registro</a></li>
-            <li><a class="dropdown-item" href="./pages/cuenta.html">Mi cuenta</a></li>
-            <li><a class="dropdown-item" href="./pages/publicar.html">Publicar</a></li>
-            <!-- visible solo para invitados -->
-            <li class="nav-item" data-guard="guest"><a class="nav-link" href="../pages/login.html">Login</a></li>
-            <li class="nav-item" data-guard="guest"><a class="nav-link" href="../pages/register.html">Registro</a></li>
-            <!-- visible para user y admin -->
-            <li class="nav-item" data-guard="user"><a class="nav-link" href="../pages/cuenta.html">Mi cuenta</a></li>
-            <!-- visible solo para admin -->
-            <li class="nav-item" data-guard="admin"><a class="nav-link" href="../pages/publicar.html">Publicar</a></li>
-            <!-- badge usuario -->
-            <li class="nav-item"><span class="nav-link disabled small">👤 <span data-user-badge>Visitante</span></span></li>
-          </ul>
-        </li>
-      </ul>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" data-nav="home" href="./index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="about" href="./pages/about.html">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="tutores" href="./pages/tutores.html">Tutores</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="instrumentos" href="./pages/instrumentos.html">Instrumentos</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="pedales" href="./pages/pedales.html">Pedales</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="news" href="./pages/news.html">Noticias</a></li>
+
+          <!-- visible solo para invitados -->
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./pages/login.html">Login</a></li>
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./pages/register.html">Registro</a></li>
+
+          <!-- visible para user y admin -->
+          <li class="nav-item" data-guard="user"><a class="nav-link" href="./pages/cuenta.html">Mi cuenta</a></li>
+
+          <!-- visible solo para admin -->
+          <li class="nav-item" data-guard="admin"><a class="nav-link" href="./pages/publicar.html">Publicar</a></li>
+
+          <!-- badge usuario -->
+          <li class="nav-item"><span class="nav-link disabled small">👤 <span data-user-badge>Visitante</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BLOQUE INTRO (lo mantengo tal cual) -->
+  <div class="container py-5">
+    <div class="row align-items-center py-4">
+      <div class="col-lg-7 fade-up">
+        <h1 class="display-5 fw-extrabold">Explora mundos, resuelve enigmas y <span class="brand-sheen">juega en familia</span></h1>
+        <p class="lead mt-3 text-secondary">Somos <strong>Glitch & Meeples</strong>, tu tienda boutique de juegos de mesa. Descubre nuestras categorías y encuentra tu próximo favorito.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#categorias" class="btn btn-primary"><i class="bi bi-grid-3x3-gap me-1"></i> Ver categorías</a>
+          <a href="#contacto" class="btn btn-outline-light">Contacto</a>
+        </div>
+      </div>
+      <div class="col-lg-5 text-center mt-4 mt-lg-0 fade-up">
+        <i class="bi bi-controller display-1 d-block"></i>
+        <p class="text-secondary mb-0">Despachos a todo Chile · Pagos seguros</p>
+      </div>
     </div>
   </div>
-</nav>
-<main class="container" style="padding-top:5.5rem">
 
-
-
-
-
-
-
-<section class="py-4">
-  <div class="p-4 p-lg-5 card-dark hover-lift fade-up">
-    <h1 class="display-6 fw-bold mb-3">Conecta con tutores y el sonido que buscas</h1>
-    <p class="lead text-secondary">SoundSeeker conecta a personas con <strong>tutores y expertos</strong> en instrumentos de cuerda (guitarra y bajo) de forma <strong>informal, directa y práctica</strong>, comenzando por <strong>Huechuraba</strong>. Además, facilita la compra/venta de <strong>instrumentos, amplificadores y pedales de segunda mano</strong>, incluyendo equipos <em>descontinuados</em> para ayudar a encontrar tu <strong>identidad sonora</strong> a precios accesibles.</p>
-  </div>
-</section>
-
-<section class="py-3">
-  <h2 class="h4 mb-3">Explora</h2>
-  <div class="row g-3">
-    <div class="col-12 col-md-4"><a class="text-decoration-none" href="pages/tutores.html"><div class="p-4 card-dark hover-lift"><h3 class="h5 mb-2">Tutores</h3><p class="text-secondary mb-0">Profesores por estilos y niveles.</p></div></a></div>
-    <div class="col-12 col-md-4"><a class="text-decoration-none" href="pages/instrumentos.html"><div class="p-4 card-dark hover-lift"><h3 class="h5 mb-2">Instrumentos</h3><p class="text-secondary mb-0">Guitarras, bajos y amplificadores.</p></div></a></div>
-    <div class="col-12 col-md-4"><a class="text-decoration-none" href="pages/pedales.html"><div class="p-4 card-dark hover-lift"><h3 class="h5 mb-2">Pedales</h3><p class="text-secondary mb-0">Efectos para esculpir tu tono.</p></div></a></div>
-  </div>
-</section>
-
-
-</main>
-<footer class="border-top border-secondary mt-5 py-4">
-  <div class="container small text-secondary d-flex flex-wrap gap-2 justify-content-between">
-    <span>© 2025 SoundSeeker — Huechuraba</span>
-    <div class="d-flex gap-3">
-      <a class="link-secondary" href="/pages/terminos.html">Términos</a>
-      <a class="link-secondary" href="/pages/faq.html">FAQ</a>
-      <a class="link-secondary" href="/pages/ayuda.html">Ayuda</a>
+  <!-- HERO Parallax / Shrink Header -->
+  <header id="sticky-parallax-header"
+          style="--hero-img:url('./img/home-1/slider2.jpg')"
+          role="banner" aria-label="SoundSeeker — Encuentra tu sonido">
+    <div class="hero-inner text-center">
+      <p class="hero-sub hero-fade">Encuentra tu sonido</p>
+      <div class="mt-3 d-flex gap-2 justify-content-center flex-wrap hero-fade">
+        <a href="pages/tutores.html" class="btn btn-primary btn-lg"><i class="bi bi-music-note-beamed me-2"></i>Buscar tutores</a>
+        <a href="pages/instrumentos.html" class="btn btn-outline-light btn-lg"><i class="bi bi-guitar me-2"></i>Explorar catálogo</a>
+      </div>
     </div>
-  </div>
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container" id="contenido">
+
+    <section class="py-4">
+      <div class="p-4 p-lg-5 card-dark hover-lift fade-up">
+        <h1 class="display-6 fw-bold mb-3">Conecta con tutores y el sonido que buscas</h1>
+        <p class="lead text-secondary">
+          SoundSeeker conecta a personas con <strong>tutores y expertos</strong> en instrumentos de cuerda (guitarra y bajo) de forma <strong>informal, directa y práctica</strong>, comenzando por <strong>Huechuraba</strong>. Además, facilita la compra/venta de <strong>instrumentos, amplificadores y pedales de segunda mano</strong>, incluyendo equipos <em>descontinuados</em> para ayudar a encontrar tu <strong>identidad sonora</strong> a precios accesibles.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-3 fade-up">
+      <h2 class="h4 mb-3">Explora</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/tutores.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Tutores</h3>
+              <p class="text-secondary mb-0">Profesores por estilos y niveles.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/instrumentos.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Instrumentos</h3>
+              <p class="text-secondary mb-0">Guitarras, bajos y amplificadores.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/pedales.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Pedales</h3>
+              <p class="text-secondary mb-0">Efectos para esculpir tu tono.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-3 fade-up"> ...... </section>
+    <section class="py-3 fade-up"> ...... </section>
+    <section class="py-3 fade-up"> ...... </section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-top border-secondary mt-5 py-4">
+    <div class="container small text-secondary d-flex flex-wrap gap-2 justify-content-between">
+      <span>© 2025 SoundSeeker</span>
+      <div class="d-flex gap-3">
+        <a class="link-secondary" href="./pages/terminos.html">Términos</a>
+        <a class="link-secondary" href="./pages/faq.html">FAQ</a>
+        <a class="link-secondary" href="./pages/ayuda.html">Ayuda</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="js/storage.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Marca para estilos SDA + navbar
+    document.body.classList.add('has-sda');
+
+    // Entrada suave del documento
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('is-loaded');
+    });
+
+    // Navbar opaca al hacer scroll
+    (function(){
+      const nav = document.querySelector('.navbar');
+      if(!nav) return;
+      const toggle = () => {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        nav.classList.toggle('nav-scroll-opaque', y > 40);
+      };
+      toggle();
+      window.addEventListener('scroll', toggle, {passive:true});
+    })();
+
+    // Revelar elementos .fade-up al entrar en viewport
+    (function(){
+      const els = document.querySelectorAll('.fade-up');
+      if(!('IntersectionObserver' in window) || !els.length) {
+        els.forEach(e => e.classList.add('is-visible'));
+        return;
+      }
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, {rootMargin: '0px 0px -10% 0px', threshold: 0.1});
+      els.forEach(el=>io.observe(el));
+    })();
+
+    /* -------- Fallback JS cuando NO hay scroll-linked animations -------- */
+    (function(){
+      const supportsScrollLinked = CSS && CSS.supports && CSS.supports('animation-timeline: scroll()');
+      if (supportsScrollLinked) return;
+
+      const header = document.getElementById('sticky-parallax-header');
+      const fadingEls = document.querySelectorAll('.hero-fade');
+      if (!header) return;
+
+      // Rango de desvanecimiento equivalente al CSS:
+      // elementos: 60vh → 95vh | header completo: 65vh → 100vh
+      const vh = () => Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+      function onScroll(){
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        const h = vh();
+
+        const elemStart = 0.60 * h, elemEnd = 0.95 * h;
+        const headStart = 0.65 * h, headEnd = 1.00 * h;
+
+        const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+        const pElem = clamp((y - elemStart) / (elemEnd - elemStart), 0, 1);
+        const pHead = clamp((y - headStart) / (headEnd - headStart), 0, 1);
+
+        fadingEls.forEach(el=>{
+          el.style.opacity = (1 - pElem).toFixed(4);
+          el.style.transform = `translateY(${-30 * pElem}px)`;
+        });
+
+        header.style.opacity = (1 - pHead).toFixed(4);
+      }
+
+      onScroll();
+      window.addEventListener('scroll', onScroll, {passive:true});
+      window.addEventListener('resize', onScroll);
+    })();
+  </script>
+
+
+
+
+
 <script>
-(function(){
-  var key = 'home';
-  var el = document.querySelector('[data-nav="'+key+'"]');
-  if(el) el.classList.add('active');
-})();
+  (function(){
+    const map = [
+      {key:'home',        test:/\/index\.html?$|\/$/},
+      {key:'about',       test:/\/pages\/about\.html$/},
+      {key:'tutores',     test:/\/pages\/tutores\.html$/},
+      {key:'instrumentos',test:/\/pages\/instrumentos\.html$/},
+      {key:'pedales',     test:/\/pages\/pedales\.html$/},
+      {key:'news',        test:/\/pages\/news\.html$/},
+      {key:'cursos',      test:/\/pages\/cursos\.html$/}
+    ];
+    const href = location.pathname + location.search;
+    const match = map.find(m => m.test.test(href));
+    if(!match) return;
+    document.querySelectorAll(`a[data-nav]`).forEach(a=>{
+      a.classList.toggle('active', a.getAttribute('data-nav') === match.key);
+      if (a.classList.contains('active')) a.setAttribute('aria-current','page');
+      else a.removeAttribute('aria-current');
+    });
+  })();
 </script>
-<script src="js/app.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,116 @@
+/* Entrada suave del documento */
+  body {
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+  body.is-loaded { opacity: 1; }
+
+  /* Soporte a usuarios que prefieren menos movimiento */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  /* Scroll-driven animation (si está soportado) */
+  @supports (animation-timeline: scroll()) {
+    @keyframes sticky-parallax-header-move-and-size {
+      from { background-position: 50% 0; }
+      to {
+        background-position: 50% 100%;
+        background-color: #0b1584;
+        height: 10svh; /* svh = viewport estable en móviles */
+        font-size: 2em;
+      }
+    }
+    #sticky-parallax-header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      animation: sticky-parallax-header-move-and-size linear forwards;
+      animation-timeline: scroll();
+      animation-range: 0vh 90vh;
+    }
+    body { padding-top: 100svh; }
+  }
+
+  /* Fallback cuando no hay animation-timeline */
+  @supports not (animation-timeline: scroll()) {
+    #sticky-parallax-header { position: relative; min-height: 100svh; }
+    body { padding-top: 0; }
+  }
+
+  /* HERO base */
+  :root {
+    --hero-img: url("./images/hero-soundseeker.jpg"); /* ajusta ruta si corresponde */
+    --hero-bg: #0b0d10; /* mismo tono que tu bg-dark */
+  }
+
+  #sticky-parallax-header {
+    color: #fff;
+    width: 100%;
+    background-image: var(--hero-img);
+    background-size: cover;
+    background-position: 50% 50%;
+    background-blend-mode: soft-light;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: clamp(2rem, 4vw + 1rem, 5rem);
+    isolation: isolate; /* para capa ::after */
+  }
+
+  /* Degradado inferior hacia transparencia + transición al fondo */
+  #sticky-parallax-header::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 32svh; /* cuánto “se desvanece” */
+    pointer-events: none;
+    /* 1) De transparente a fondo oscuro del sitio */
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,.4) 45%,
+      rgba(0,0,0,.85) 100%
+    );
+    z-index: -1; /* queda detrás del contenido del header */
+  }
+
+  /* Alternativa con máscara (más limpia donde se soporte) */
+  @supports (mask-image: linear-gradient(#000, transparent)) or (-webkit-mask-image: linear-gradient(#000, transparent)) {
+    #sticky-parallax-header::after {
+      background: none;
+    }
+    #sticky-parallax-header {
+      -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+              mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+      -webkit-mask-size: 100% 100%;
+              mask-size: 100% 100%;
+    }
+  }
+
+  /* Micro-animaciones de cards (percepción de fluidez) */
+  .hover-lift { transition: transform .2s ease, box-shadow .2s ease; }
+  .hover-lift:hover { transform: translateY(-2px); }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  .fade-up.is-visible {
+    opacity: 1; transform: none;
+  }
+
+  /* Navbar al hacer scroll */
+  .nav-scroll-opaque {
+    background-color: rgba(0,0,0,0.9) !important;
+    backdrop-filter: blur(6px);
+  }
+
+  /* Skip link para accesibilidad */
+  .skip-link {
+    position:absolute; left:-9999px; top:auto;
+    width:1px; height:1px; overflow:hidden;
+  }
+  .skip-link:focus {
+    left: 1rem; top: 1rem; width:auto; height:auto; padding:.5rem 1rem;
+    background:#0b1584; color:#fff; border-radius:.5rem; z-index:9999;
+  }

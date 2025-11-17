@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SoundSeeker · Encuentra tu sonido</title>
+
+  <meta name="description" content="SoundSeeker conecta alumnos con tutores de guitarra y bajo en Huechuraba, y facilita la compra/venta de instrumentos, amplificadores y pedales de segunda mano.">
+  <meta name="theme-color" content="#0b0d10">
+
+  <!-- Performance: preconexión CDNs -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <!-- LCP: Preload de imagen hero (ajusta la ruta si corresponde) -->
+  <link rel="preload" as="image" href="./img/home-1/slider2.jpg" fetchpriority="high">
+
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link href="./css/styles.css" rel="stylesheet">
+
+  <style>
+      :root {
+      --brand-1: #0f172a;    /* slate-900 */
+      --brand-2: #1e293b;    /* slate-800 */
+      --accent:  #8b5cf6;    /* violet-500 */
+      --accent-2:#22d3ee;    /* cyan-400 */
+      --ok:      #22c55e;    /* green-500 */
+      --warn:    #f59e0b;    /* amber-500 */
+      --danger:  #ef4444;    /* red-500 */
+      --text:    #e5e7eb;    /* gray-200 */
+      --muted:   #94a3b8;    /* slate-400 */
+      --card:    #111827;    /* gray-900 */
+      --card-2:  #0b1220;    /* deep */
+      --shadow:  0 10px 30px rgba(0,0,0,.35);
+      --radius-xl: 1.25rem;
+      --radius-lg: .85rem;
+      --radius-md: .65rem;
+    }
+
+
+    /* Desvanecer gradualmente el subtítulo y los botones del hero al hacer scroll */
+    @supports (animation-timeline: scroll()) {
+      @keyframes hero-fade-out {
+        from {
+          opacity: 1;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+      }
+
+      .hero-fade {
+        animation: hero-fade-out linear both;
+        animation-timeline: scroll();
+        animation-range: 60vh 95vh; /* hasta dónde ocurre la desaparición */
+      }
+    }
+
+  
+    @keyframes sheen {
+      0% { background-position:-200% 0; }
+      100% { background-position:200% 0; }
+    }
+    .brand-sheen {
+      background: linear-gradient(90deg, var(--text), var(--accent), var(--accent-2), var(--text));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      background-size: 300% 100%; animation: sheen 6s linear infinite;
+    }
+
+    @keyframes fadeUp { from {opacity:0; transform: translateY(16px);} to {opacity:1; transform: translateY(0);} }
+    .fade-up { opacity:0; animation: fadeUp .8s ease-out .15s forwards; }
+
+    .hover-lift { transition: transform .25s ease, box-shadow .25s ease; }
+    .hover-lift:hover { transform: translateY(-6px) scale(1.01); box-shadow: var(--shadow); }
+
+    @keyframes pulseBadge { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.08);} }
+    .badge-pulse { animation: pulseBadge 1.2s ease-in-out infinite; transform-origin: center; }
+
+
+
+
+
+    /* Entrada suave del documento */
+    body { opacity: 0; transition: opacity .8s ease; }
+    body.is-loaded { opacity: 1; }
+
+
+    @supports(animation-range: 0vh 80vh) {
+			@keyframes sticky-parallax-header-move-and-size {
+				from {
+					background-position: 50% 0;
+				}
+				to {
+					background-position: 50% 100%;
+					background-color: #0b1584;
+					height: 10vh;
+					font-size: 2em;
+				}
+			}
+
+			#sticky-parallax-header {
+				position: fixed;
+				top: 0;
+
+				animation: sticky-parallax-header-move-and-size linear forwards;
+				animation-timeline: scroll();
+				animation-range: 0vh 90vh;
+			}
+
+			body {
+				padding-top: 100vh;
+			}
+		}
+
+    /* Fallback cuando no hay animation-timeline */
+    @supports not (animation-timeline: scroll()) {
+      #sticky-parallax-header { position: relative; min-height: 100svh; }
+      body { padding-top: 0; }
+    }
+
+     /* HERO base */
+    :root {
+      --hero-img: url("./img/home-1/slider2.jpg"); /* ajusta la ruta si usas otra */
+      --hero-bg: #0b0d10;
+    }
+
+
+    #sticky-parallax-header {
+      color: #fff;
+      height: 100vh;
+      width: 100%;
+      background-image: var(--hero-img);
+      background-size: cover;
+      background-position: 50% 50%;
+      background-blend-mode: soft-light;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: calc(4vw + 1em);
+    }
+
+     #sticky-parallax-header {
+      font-size: clamp(2rem, 4vw + 1rem, 5rem);
+      isolation: isolate; /* permite la capa ::after detrás del contenido */
+      }
+
+    
+    /* Degradado inferior hacia transparencia/oscuro */
+    #sticky-parallax-header::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 42svh;
+      pointer-events: none;
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,.4) 45%,
+        rgba(0,0,0,.85) 100%
+      );
+      z-index: -1;
+    }
+
+    /* Alternativa con máscara (si hay soporte) */
+    @supports (mask-image: linear-gradient(#000, transparent)) or (-webkit-mask-image: linear-gradient(#000, transparent)) {
+      #sticky-parallax-header::after { background: none; }
+      #sticky-parallax-header {
+        -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+                mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+        -webkit-mask-size: 100% 100%;
+                mask-size: 100% 100%;
+      }
+    }
+
+    
+    /* Micro-animaciones */
+    .hover-lift { transition: transform .2s ease, box-shadow .2s ease; }
+    .hover-lift:hover { transform: translateY(-2px); }
+
+    .fade-up { opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+    .fade-up.is-visible { opacity: 1; transform: none; }
+
+    /* Navbar al hacer scroll */
+    .nav-scroll-opaque {
+      background-color: rgba(0,0,0,0.9) !important;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Skip link accesibilidad */
+    .skip-link {
+      position: absolute; left: -9999px; top: auto;
+      width: 1px; height: 1px; overflow: hidden;
+    }
+    .skip-link:focus {
+      left: 1rem; top: 1rem; width: auto; height: auto; padding: .5rem 1rem;
+      background: #0b1584; color: #fff; border-radius: .5rem; z-index: 9999;
+    }
+
+
+
+
+
+
+	</style>
+
+</head>
+
+<body class="bg-dark text-light">
+
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-opacity-75 bg-black border-bottom border-secondary fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="./index.html"><i class="bi bi-music-note-beamed me-2"></i>SoundSeeker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" data-nav="home" href="./index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="about" href="./pages/about.html">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="tutores" href="./pages/tutores.html">Tutores</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="instrumentos" href="./pages/instrumentos.html">Instrumentos</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="pedales" href="./pages/pedales.html">Pedales</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="news" href="./pages/news.html">Noticias</a></li>
+
+          <!-- visible solo para invitados -->
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./pages/login.html">Login</a></li>
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./pages/register.html">Registro</a></li>
+
+          <!-- visible para user y admin -->
+          <li class="nav-item" data-guard="user"><a class="nav-link" href="./pages/cuenta.html">Mi cuenta</a></li>
+
+          <!-- visible solo para admin -->
+          <li class="nav-item" data-guard="admin"><a class="nav-link" href="./pages/publicar.html">Publicar</a></li>
+
+          <!-- badge usuario -->
+          <li class="nav-item"><span class="nav-link disabled small">👤 <span data-user-badge>Visitante</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+   <div class="container py-5">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-7 fade-up">
+          <h1 class="display-5 fw-extrabold">Explora mundos, resuelve enigmas y <span class="brand-sheen">juega en familia</span></h1>
+          <p class="lead mt-3 text-secondary">Somos <strong>Glitch & Meeples</strong>, tu tienda boutique de juegos de mesa. Descubre nuestras categorías y encuentra tu próximo favorito.</p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#categorias" class="btn btn-primary"><i class="bi bi-grid-3x3-gap me-1"></i> Ver categorías</a>
+            <a href="#contacto" class="btn btn-outline-light">Contacto</a>
+          </div>
+        </div>
+        <div class="col-lg-5 text-center mt-4 mt-lg-0 fade-up">
+          <i class="bi bi-controller display-1 d-block"></i>
+          <p class="text-secondary mb-0">Despachos a todo Chile · Pagos seguros</p>
+        </div>
+      </div>
+    </div>
+
+  
+
+  <!-- HERO Parallax / Shrink Header -->
+  <header id="sticky-parallax-header"
+          style="--hero-img: url('./img/home-1/slider2.jpg')"
+          role="banner" aria-label="SoundSeeker — Encuentra tu sonido">
+    <div class="hero-inner text-center">
+      <!---<h1 class="hero-title">SoundSeeker</h1>--->
+      <p class="hero-sub hero-fade">Encuentra tu sonido</p>
+      <div class="mt-3 d-flex gap-2 justify-content-center flex-wrap hero-fade">
+        <a href="pages/tutores.html" class="btn btn-primary btn-lg"><i class="bi bi-music-note-beamed me-2"></i>Buscar tutores</a>
+        <a href="pages/instrumentos.html" class="btn btn-outline-light btn-lg"><i class="bi bi-guitar me-2"></i>Explorar catálogo</a>
+      </div>
+
+    </div>
+  </header>
+
+ 
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container" id="contenido">
+
+    <section class="py-4">
+      <div class="p-4 p-lg-5 card-dark hover-lift fade-up">
+        <h1 class="display-6 fw-bold mb-3">Conecta con tutores y el sonido que buscas</h1>
+        <p class="lead text-secondary">
+          SoundSeeker conecta a personas con <strong>tutores y expertos</strong> en instrumentos de cuerda (guitarra y bajo) de forma <strong>informal, directa y práctica</strong>, comenzando por <strong>Huechuraba</strong>. Además, facilita la compra/venta de <strong>instrumentos, amplificadores y pedales de segunda mano</strong>, incluyendo equipos <em>descontinuados</em> para ayudar a encontrar tu <strong>identidad sonora</strong> a precios accesibles.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-3 fade-up">
+      <h2 class="h4 mb-3">Explora</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/tutores.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Tutores</h3>
+              <p class="text-secondary mb-0">Profesores por estilos y niveles.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/instrumentos.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Instrumentos</h3>
+              <p class="text-secondary mb-0">Guitarras, bajos y amplificadores.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/pedales.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Pedales</h3>
+              <p class="text-secondary mb-0">Efectos para esculpir tu tono.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-3 fade-up">
+      <h2 class="h4 mb-3">Explora</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/tutores.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Tutores</h3>
+              <p class="text-secondary mb-0">Profesores por estilos y niveles.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/instrumentos.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Instrumentos</h3>
+              <p class="text-secondary mb-0">Guitarras, bajos y amplificadores.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/pedales.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Pedales</h3>
+              <p class="text-secondary mb-0">Efectos para esculpir tu tono.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-3 fade-up">
+      <h2 class="h4 mb-3">Explora</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/tutores.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Tutores</h3>
+              <p class="text-secondary mb-0">Profesores por estilos y niveles.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/instrumentos.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Instrumentos</h3>
+              <p class="text-secondary mb-0">Guitarras, bajos y amplificadores.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/pedales.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Pedales</h3>
+              <p class="text-secondary mb-0">Efectos para esculpir tu tono.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-3 fade-up">
+      <h2 class="h4 mb-3">Explora</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/tutores.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Tutores</h3>
+              <p class="text-secondary mb-0">Profesores por estilos y niveles.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/instrumentos.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Instrumentos</h3>
+              <p class="text-secondary mb-0">Guitarras, bajos y amplificadores.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-12 col-md-4">
+          <a class="text-decoration-none" href="pages/pedales.html">
+            <div class="p-4 card-dark hover-lift">
+              <h3 class="h5 mb-2">Pedales</h3>
+              <p class="text-secondary mb-0">Efectos para esculpir tu tono.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-top border-secondary mt-5 py-4">
+    <div class="container small text-secondary d-flex flex-wrap gap-2 justify-content-between">
+      <span>© 2025 SoundSeeker</span>
+      <div class="d-flex gap-3">
+        <a class="link-secondary" href="./pages/terminos.html">Términos</a>
+        <a class="link-secondary" href="./pages/faq.html">FAQ</a>
+        <a class="link-secondary" href="./pages/ayuda.html">Ayuda</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- SCRIPTS -->
+  <script type="module" src="js/storage.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/app.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Marca para estilos SDA + navbar
+    document.body.classList.add('has-sda');
+
+    // Entrada suave del documento
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('is-loaded');
+    });
+
+    // Oscurecer navbar al hacer scroll
+    (function(){
+      const nav = document.querySelector('.navbar');
+      if(!nav) return;
+      const toggle = () => {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        nav.classList.toggle('nav-scroll-opaque', y > 40);
+      };
+      toggle();
+      window.addEventListener('scroll', toggle, {passive:true});
+    })();
+
+    // Revelar elementos .fade-up al entrar en viewport
+    (function(){
+      const els = document.querySelectorAll('.fade-up');
+      if(!('IntersectionObserver' in window) || !els.length) {
+        els.forEach(e => e.classList.add('is-visible'));
+        return;
+      }
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, {rootMargin: '0px 0px -10% 0px', threshold: 0.1});
+      els.forEach(el=>io.observe(el));
+    })();
+
+    // (Opcional) Cambiar imagen del hero por JS:
+    // document.documentElement.style.setProperty('--hero-img', 'url("./images/otra-portada.jpg")');
+  </script>
+
+
+
+
+</body>
+</html>
+
+
+<script>
+(function() {
+  const targets = document.querySelectorAll('.hero-fade');
+  if (!targets.length || 'animationTimeline' in document.documentElement.style) return;
+
+  window.addEventListener('scroll', () => {
+    const max = window.innerHeight * 0.2; // mismo 60vh del CSS
+    const scroll = Math.min(window.scrollY, max);
+    const progress = scroll / max;
+    targets.forEach(el => {
+      el.style.opacity = 1 - progress;
+      el.style.transform = `translateY(${-30 * progress}px)`;
+    });
+  }, { passive: true });
+})();
+</script>

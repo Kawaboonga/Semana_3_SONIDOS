@@ -472,5 +472,51 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+    // Marca para estilos SDA + navbar
+    document.body.classList.add('has-sda');
+
+    // Entrada suave del documento
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('is-loaded');
+    });
+
+    // Oscurecer navbar al hacer scroll
+    (function(){
+      const nav = document.querySelector('.navbar');
+      if(!nav) return;
+      const toggle = () => {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        nav.classList.toggle('nav-scroll-opaque', y > 40);
+      };
+      toggle();
+      window.addEventListener('scroll', toggle, {passive:true});
+    })();
+
+    // Revelar elementos .fade-up al entrar en viewport
+    (function(){
+      const els = document.querySelectorAll('.fade-up');
+      if(!('IntersectionObserver' in window) || !els.length) {
+        els.forEach(e => e.classList.add('is-visible'));
+        return;
+      }
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, {rootMargin: '0px 0px -10% 0px', threshold: 0.1});
+      els.forEach(el=>io.observe(el));
+    })();
+
+    // (Opcional) Cambiar imagen del hero por JS:
+    // document.documentElement.style.setProperty('--hero-img', 'url("./images/otra-portada.jpg")');
+  </script>
+
+  
+
 </body>
 </html>

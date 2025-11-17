@@ -1,0 +1,509 @@
+<!-- /pages/servicios.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Servicios · SoundSeeker</title>
+
+  <meta name="description" content="Servicios para músicos en Huechuraba: clases 1:1, packs, evaluación técnica, configuración de equipo, mantenimiento, grabación demo, talleres grupales.">
+  <meta name="theme-color" content="#0b0d10">
+
+  <!-- CDNs -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Estilos proyecto -->
+  <link href="../css/styles.css" rel="stylesheet">
+
+  <style>
+    .hero-compact {
+      background: radial-gradient(60% 80% at 50% 0%, rgba(139,92,246,0.15), rgba(34,211,238,0.06) 60%, transparent 100%),
+                  linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      margin-top:56px;
+    }
+    .muted { color:#94a3b8; }
+    .badge-soft { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); }
+
+    /* Tarjeta servicio */
+    .srv-card { background:#0b1220; border:1px solid rgba(255,255,255,.08); border-radius:.85rem; overflow:hidden; height:100%; }
+    .srv-thumb { aspect-ratio:16/9; background-size:cover; background-position:center; }
+    .srv-body { padding:1rem 1rem 1.25rem; }
+    .pill { font-size:.75rem; padding:.25rem .5rem; border-radius:999px; border:1px solid rgba(255,255,255,.12); }
+    .divider { height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent); margin:.75rem 0 1rem; }
+
+    /* Pricing */
+    .plan { background:#0b1220; border:1px solid rgba(255,255,255,.12); border-radius:1rem; }
+    .plan.pop { border-color:#0b1584; box-shadow:0 10px 30px rgba(11,21,132,.25); }
+    .plan .price { font-size:2rem; font-weight:700; }
+
+    /* Animaciones */
+    @media (prefers-reduced-motion:no-preference){
+      .hover-lift { transition: transform .2s ease, box-shadow .2s ease; }
+      .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+      .fade-up { opacity:0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+      .fade-up.is-visible { opacity:1; transform:none; }
+    }
+
+    .pagination .page-link { background:transparent; border-color:rgba(255,255,255,.15); }
+    .pagination .page-item.active .page-link { background:#0b1584; border-color:#0b1584; }
+  </style>
+</head>
+<body class="bg-dark text-light">
+
+  <!-- NAVBAR (sin añadir "Servicios" para mantener consistencia actual) -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-opacity-75 bg-black border-bottom border-secondary fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="../index.html"><i class="bi bi-music-note-beamed me-2"></i>SoundSeeker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" data-nav="home" href="../index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="about" href="./about.html">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="tutores" href="./tutores.html">Tutores</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="instrumentos" href="./instrumentos.html">Instrumentos</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="pedales" href="./pedales.html">Pedales</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="news" href="./news.html">Noticias</a></li>
+
+          <!-- visible solo para invitados -->
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./login.html">Login</a></li>
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./register.html">Registro</a></li>
+
+          <!-- visible para user y admin -->
+          <li class="nav-item" data-guard="user"><a class="nav-link" href="./cuenta.html">Mi cuenta</a></li>
+
+          <!-- visible solo para admin -->
+          <li class="nav-item" data-guard="admin"><a class="nav-link" href="./publicar.html">Publicar</a></li>
+
+          <!-- badge usuario -->
+          <li class="nav-item"><span class="nav-link disabled small">👤 <span data-user-badge>Visitante</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO compacto -->
+  <header class="hero-compact">
+    <div class="container py-4">
+      <nav aria-label="breadcrumb" class="small">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a class="link-secondary" href="../index.html">Inicio</a></li>
+          <li class="breadcrumb-item active text-light" aria-current="page">Servicios</li>
+        </ol>
+      </nav>
+      <div class="d-flex flex-wrap align-items-end justify-content-between gap-3">
+        <div>
+          <h1 class="h2 mb-1 fw-bold">Servicios</h1>
+          <p class="mb-0 text-secondary">Soluciones para tu aprendizaje y tu sonido en <strong>Huechuraba</strong>.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge badge-soft rounded-pill"><i class="bi bi-geo me-1"></i> Huechuraba</span>
+          <span class="badge badge-soft rounded-pill"><i class="bi bi-shield-check me-1"></i> Profesionales verificados</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-4">
+
+    <!-- Filtros -->
+    <section class="card-dark p-3 p-lg-4 rounded-4 mb-4">
+      <form id="filterForm" class="row g-3 align-items-end">
+        <div class="col-12 col-md-4">
+          <label class="form-label small text-secondary">Buscar</label>
+          <input id="q" type="search" class="form-control" placeholder="Clases 1:1, evaluación técnica, setup de pedalera…">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Tipo</label>
+          <select id="tipo" class="form-select">
+            <option value="">Todos</option>
+            <option value="clase">Clases 1:1</option>
+            <option value="pack">Packs</option>
+            <option value="evaluacion">Evaluación</option>
+            <option value="setup">Setup/Configuración</option>
+            <option value="mantenimiento">Mantenimiento</option>
+            <option value="grabacion">Grabación</option>
+            <option value="taller">Taller grupal</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Modalidad</label>
+          <select id="modalidad" class="form-select">
+            <option value="">Cualquiera</option>
+            <option value="presencial">Presencial</option>
+            <option value="online">Online</option>
+            <option value="mixto">Mixto</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Precio máx. (CLP)</label>
+          <input id="precio" type="number" class="form-control" min="0" step="5000" placeholder="30000">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Ordenar</label>
+          <select id="orden" class="form-select">
+            <option value="relevancia">Relevancia</option>
+            <option value="precio_asc">Precio ↑</option>
+            <option value="precio_desc">Precio ↓</option>
+            <option value="duracion_desc">Mayor duración</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2 d-grid">
+          <button type="button" id="btnReset" class="btn btn-outline-light"><i class="bi bi-eraser me-1"></i> Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Result count + pills activas -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div><span id="resultCount" class="text-secondary small">0 resultados</span></div>
+      <div id="activeFilters" class="d-flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- GRID servicios -->
+    <section id="gridServicios" class="row g-3">
+      <!-- Tarjetas generadas por JS -->
+    </section>
+
+    <!-- Paginación -->
+    <nav class="mt-4">
+      <ul id="paginador" class="pagination justify-content-center"></ul>
+    </nav>
+
+    <!-- Pricing / Packs -->
+    <section class="my-5">
+      <h2 class="h4 mb-3">Planes y Packs recomendados</h2>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="plan p-4 h-100">
+            <div class="small muted">Pack</div>
+            <h3 class="h5">Inicio</h3>
+            <div class="price mt-2">$60.000</div>
+            <div class="muted small mb-3">3 clases 1:1 · 60 min · Presencial/Online</div>
+            <ul class="small mb-3">
+              <li>Diagnóstico inicial</li>
+              <li>Rutina básica</li>
+              <li>Seguimiento por WhatsApp</li>
+            </ul>
+            <button class="btn btn-primary w-100" data-pack="inicio" data-guard="user">Comprar</button>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="plan pop p-4 h-100">
+            <div class="small muted">Pack</div>
+            <h3 class="h5">Intermedio</h3>
+            <div class="price mt-2">$110.000</div>
+            <div class="muted small mb-3">6 clases 1:1 · 60 min · Mixto</div>
+            <ul class="small mb-3">
+              <li>Técnica + repertorio</li>
+              <li>Grabación de práctica</li>
+              <li>Feedback detallado</li>
+            </ul>
+            <button class="btn btn-primary w-100" data-pack="intermedio" data-guard="user">Comprar</button>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="plan p-4 h-100">
+            <div class="small muted">Servicio</div>
+            <h3 class="h5">Setup Pro</h3>
+            <div class="price mt-2">$35.000</div>
+            <div class="muted small mb-3">Configuración de pedalera/amp · 90 min</div>
+            <ul class="small mb-3">
+              <li>Cadena de señal óptima</li>
+              <li>Ganancias y niveles</li>
+              <li>Backup de presets</li>
+            </ul>
+            <button class="btn btn-outline-light w-100" data-pack="setup" data-guard="user">Agendar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="my-5">
+      <h2 class="h4 mb-3">Preguntas frecuentes</h2>
+      <div class="accordion" id="faq">
+        <div class="accordion-item bg-transparent text-light border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+              ¿Puedo combinar clases presenciales y online?
+            </button>
+          </h2>
+          <div id="f1" class="accordion-collapse collapse" data-bs-parent="#faq">
+            <div class="accordion-body text-secondary">Sí, los packs “Intermedio” y “Avanzado” admiten modalidad mixta sin costo adicional.</div>
+          </div>
+        </div>
+        <div class="accordion-item bg-transparent text-light border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+              ¿Qué pasa si no puedo asistir a una clase?
+            </button>
+          </h2>
+          <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faq">
+            <div class="accordion-body text-secondary">Puedes reprogramar con 24h de anticipación. Menos de 24h se considera dictada.</div>
+          </div>
+        </div>
+        <div class="accordion-item bg-transparent text-light border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+              ¿Traen equipo para configuración de sonido?
+            </button>
+          </h2>
+          <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faq">
+            <div class="accordion-body text-secondary">Trabajamos con tu propio equipo. Podemos sugerir upgrades y ordenar la pedalera.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA final -->
+    <section class="my-5 card-dark p-4 rounded-4 text-center">
+      <h2 class="h4 mb-2">¿No encuentras el servicio que necesitas?</h2>
+      <p class="text-secondary mb-3">Cuéntanos tu objetivo y armamos un plan a medida.</p>
+      <a href="./tutores.html" class="btn btn-primary"><i class="bi bi-people me-1"></i> Ver tutores</a>
+      <a href="./cursos.html" class="btn btn-outline-light ms-2"><i class="bi bi-grid-3x3-gap me-1"></i> Ver cursos</a>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-top border-secondary mt-5 py-4">
+    <div class="container small text-secondary d-flex flex-wrap gap-2 justify-content-between">
+      <span>© 2025 SoundSeeker</span>
+      <div class="d-flex gap-3">
+        <a class="link-secondary" href="./terminos.html">Términos</a>
+        <a class="link-secondary" href="./faq.html">FAQ</a>
+        <a class="link-secondary" href="./ayuda.html">Ayuda</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Reserva -->
+  <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form class="modal-content card-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalReservaLabel"><i class="bi bi-calendar-check me-1"></i> Reservar servicio</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small">Fecha</label>
+            <input type="date" id="resFecha" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small">Hora</label>
+            <input type="time" id="resHora" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small">Duración (horas)</label>
+            <input type="number" id="resDuracion" class="form-control" value="1" min="1" max="6" step="1">
+          </div>
+          <div class="small muted">Total estimado: <strong id="resTotal">$—</strong></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i> Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/storage.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  // ---------- Dataset local de servicios (reemplaza por fetch a tu API) ----------
+  const SERVICIOS = [
+    { id:'s1', titulo:'Clase 1:1 Guitarra (60 min)', tipo:'clase', modalidad:'presencial', duracion_h:1, precio:20000, tutor:'Marco Vidal', thumb:'../img/servicios/clase-gtr.jpg', desc:'Técnica, repertorio y oído. Plan a medida.' },
+    { id:'s2', titulo:'Clase 1:1 Bajo (60 min)', tipo:'clase', modalidad:'mixto', duracion_h:1, precio:22000, tutor:'Constanza Fuentes', thumb:'../img/servicios/clase-bass.jpg', desc:'Groove, slap y lectura rítmica.' },
+    { id:'s3', titulo:'Pack 3 clases guitarra', tipo:'pack', modalidad:'online', duracion_h:3, precio:60000, tutor:'Marco Vidal', thumb:'../img/servicios/pack3.jpg', desc:'Seguimiento por WhatsApp + material.' },
+    { id:'s4', titulo:'Evaluación técnica + plan', tipo:'evaluacion', modalidad:'presencial', duracion_h:1, precio:25000, tutor:'Equipo SoundSeeker', thumb:'../img/servicios/evaluacion.jpg', desc:'Diagnóstico, objetivos y rutina semanal.' },
+    { id:'s5', titulo:'Setup pedalera/amp (90 min)', tipo:'setup', modalidad:'presencial', duracion_h:1.5, precio:35000, tutor:'Equipo Técnico', thumb:'../img/servicios/setup.jpg', desc:'Cadena de señal, ganancias, presets.' },
+    { id:'s6', titulo:'Mantenimiento básico guitarra', tipo:'mantenimiento', modalidad:'presencial', duracion_h:1.5, precio:30000, tutor:'Luthier asociado', thumb:'../img/servicios/mantencion.jpg', desc:'Cambio cuerdas, octavación ligera, limpieza.' },
+    { id:'s7', titulo:'Grabación demo (2 pistas)', tipo:'grabacion', modalidad:'presencial', duracion_h:2, precio:45000, tutor:'Estudio asociado', thumb:'../img/servicios/grabacion.jpg', desc:'Grabación rápida para casting o portafolio.' },
+    { id:'s8', titulo:'Taller grupal: Blues básico', tipo:'taller', modalidad:'presencial', duracion_h:2, precio:15000, tutor:'Marco Vidal', thumb:'../img/servicios/taller.jpg', desc:'Grupo 6-10 pers. Material incluido.' }
+  ];
+
+  // ---------- Utils ----------
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const fmtCLP = v => new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(v);
+
+  const state = { q:'', tipo:'', modalidad:'', precio:'', orden:'relevancia', page:1, perPage:6 };
+
+  function applyFilters(){
+    let arr = SERVICIOS.slice();
+    const q = state.q.toLowerCase();
+    if (q) arr = arr.filter(s => s.titulo.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || (s.tutor||'').toLowerCase().includes(q));
+    if (state.tipo) arr = arr.filter(s => s.tipo === state.tipo);
+    if (state.modalidad) arr = arr.filter(s => s.modalidad === state.modalidad);
+    if (state.precio) arr = arr.filter(s => s.precio <= Number(state.precio));
+
+    switch(state.orden){
+      case 'precio_asc': arr.sort((a,b)=>a.precio-b.precio); break;
+      case 'precio_desc': arr.sort((a,b)=>b.precio-a.precio); break;
+      case 'duracion_desc': arr.sort((a,b)=>b.duracion_h-a.duracion_h); break;
+      default: /* relevancia */ break;
+    }
+    return arr;
+  }
+
+  function renderGrid(items){
+    const grid = $('#gridServicios'); grid.innerHTML = '';
+    const start = (state.page-1)*state.perPage;
+    const pageItems = items.slice(start, start+state.perPage);
+
+    if(!pageItems.length){
+      grid.innerHTML = `<div class="col-12 text-center text-secondary py-5">No hay servicios para los filtros seleccionados.</div>`;
+      return;
+    }
+
+    for(const s of pageItems){
+      const col = document.createElement('div');
+      col.className = 'col-12 col-md-6 col-lg-4';
+      const thumb = s.thumb || '../img/servicios/placeholder.jpg';
+      col.innerHTML = `
+        <article class="srv-card hover-lift d-flex flex-column">
+          <div class="srv-thumb" style="background-image:url('${thumb}')"></div>
+          <div class="srv-body d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <h3 class="h6 mb-1">${s.titulo}</h3>
+              <span class="pill text-nowrap"><i class="bi bi-clock me-1"></i>${s.duracion_h}h</span>
+            </div>
+            <div class="small muted mb-2"><i class="bi bi-person-video2 me-1"></i>${s.tutor||'—'}</div>
+            <div class="d-flex gap-2 flex-wrap small mb-2">
+              <span class="pill"><i class="bi bi-tag me-1"></i>${s.tipo}</span>
+              <span class="pill"><i class="bi bi-wifi me-1"></i>${s.modalidad}</span>
+            </div>
+            <p class="muted small mb-2">${s.desc}</p>
+            <div class="divider"></div>
+            <div class="d-flex align-items-center justify-content-between mt-auto">
+              <div class="fw-bold">${fmtCLP(s.precio)}</div>
+              <div class="d-flex gap-2">
+                <a class="btn btn-outline-light btn-sm" data-guard="guest" href="./login.html">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                </a>
+                <button class="btn btn-primary btn-sm" data-guard="user" data-srv-id="${s.id}">
+                  <i class="bi bi-calendar-check me-1"></i> Reservar
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+      grid.appendChild(col);
+    }
+  }
+
+  function renderPager(total){
+    const pages = Math.max(1, Math.ceil(total/state.perPage));
+    const ul = $('#paginador'); ul.innerHTML = '';
+    function li(page,label=page,active=false,disabled=false){
+      const li = document.createElement('li');
+      li.className = 'page-item'+(active?' active':'')+(disabled?' disabled':'');
+      li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+      if(!disabled){
+        li.querySelector('a').addEventListener('click', e=>{
+          e.preventDefault(); state.page=page; update();
+          window.scrollTo({ top: document.querySelector('main').offsetTop - 56, behavior: 'smooth' });
+        });
+      }
+      ul.appendChild(li);
+    }
+    li(Math.max(1,state.page-1),'«',false,state.page===1);
+    for(let p=1;p<=pages;p++) li(p,String(p),p===state.page);
+    li(Math.min(pages,state.page+1),'»',false,state.page===pages);
+  }
+
+  function renderActiveFilters(){
+    const wrap = $('#activeFilters'); wrap.innerHTML='';
+    const add=(label,clear)=>{ const b=document.createElement('span'); b.className='badge badge-soft rounded-pill'; b.innerHTML=`${label} <button class="btn btn-sm btn-link text-light text-decoration-none ms-1 p-0"><i class="bi bi-x-circle"></i></button>`; b.querySelector('button').addEventListener('click',clear); wrap.appendChild(b); };
+    if(state.q) add(`"${state.q}"`,()=>{$('#q').value='';state.q='';state.page=1;update();});
+    if(state.tipo) add(state.tipo,()=>{$('#tipo').value='';state.tipo='';state.page=1;update();});
+    if(state.modalidad) add(state.modalidad,()=>{$('#modalidad').value='';state.modalidad='';state.page=1;update();});
+    if(state.precio) add(`≤ ${fmtCLP(state.precio)}`,()=>{$('#precio').value='';state.precio='';state.page=1;update();});
+  }
+
+  function update(){
+    const items = applyFilters();
+    const total = items.length;
+    $('#resultCount').textContent = `${total} resultado${total===1?'':'s'}`;
+    renderActiveFilters();
+
+    const pages = Math.max(1, Math.ceil(total/state.perPage));
+    if(state.page>pages) state.page=pages;
+
+    renderGrid(items);
+    renderPager(total);
+    revealOnScroll();
+  }
+
+  // Eventos filtros
+  $('#q').addEventListener('input', e=>{ state.q=e.target.value.trim(); state.page=1; update(); });
+  $('#tipo').addEventListener('change', e=>{ state.tipo=e.target.value; state.page=1; update(); });
+  $('#modalidad').addEventListener('change', e=>{ state.modalidad=e.target.value; state.page=1; update(); });
+  $('#precio').addEventListener('input', e=>{ state.precio=e.target.value; state.page=1; update(); });
+  $('#orden').addEventListener('change', e=>{ state.orden=e.target.value; state.page=1; update(); });
+  $('#btnReset').addEventListener('click', ()=>{
+    ['q','tipo','modalidad','precio','orden'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el.tagName==='SELECT') el.selectedIndex=0; else el.value='';
+    });
+    Object.assign(state,{ q:'', tipo:'', modalidad:'', precio:'', orden:'relevancia', page:1 });
+    update();
+  });
+
+  // Reserva (demo)
+  let currentPrice = 0;
+  document.addEventListener('click',(e)=>{
+    const btn = e.target.closest('[data-guard="user"][data-srv-id]');
+    if(!btn) return;
+    const id = btn.getAttribute('data-srv-id');
+    const srv = SERVICIOS.find(s=>s.id===id); if(!srv) return;
+    currentPrice = srv.precio;
+    document.getElementById('resDuracion').value = Math.max(1, Math.round(srv.duracion_h));
+    document.getElementById('resTotal').textContent = fmtCLP(currentPrice * Math.max(1, Math.round(srv.duracion_h)));
+    const modal = new bootstrap.Modal(document.getElementById('modalReserva'));
+    modal.show();
+  });
+
+  document.getElementById('resDuracion').addEventListener('input', e=>{
+    const d = Math.max(1, Number(e.target.value||1));
+    document.getElementById('resTotal').textContent = fmtCLP(currentPrice * d);
+  });
+
+  document.querySelector('form.modal-content')?.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    // Integrar con API real aquí
+    alert('Reserva solicitada. Te contactaremos para confirmar.');
+    bootstrap.Modal.getInstance(document.getElementById('modalReserva'))?.hide();
+  });
+
+  // Revelar .fade-up
+  function revealOnScroll(){
+    const els = $$('.fade-up:not(.is-visible)');
+    if (!('IntersectionObserver' in window) || !els.length) {
+      els.forEach(e=>e.classList.add('is-visible')); return;
+    }
+    const io = new IntersectionObserver((entries,obs)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){ entry.target.classList.add('is-visible'); obs.unobserve(entry.target); }
+      });
+    }, { rootMargin:'0px 0px -10% 0px', threshold:.1 });
+    els.forEach(el=>io.observe(el));
+  }
+
+  // Init
+  update();
+  </script>
+</body>
+</html>

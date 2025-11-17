@@ -1,0 +1,489 @@
+<!-- /pages/cursos.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cursos · SoundSeeker</title>
+
+  <meta name="description" content="Cursos de guitarra y bajo en Huechuraba: principiantes a avanzados, online o presenciales, con tutores verificados.">
+  <meta name="theme-color" content="#0b0d10">
+
+  <!-- CDNs -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Estilos del proyecto -->
+  <link href="../css/styles.css" rel="stylesheet">
+
+  <style>
+    /* Hero compacto */
+    .hero-compact {
+      background: radial-gradient(60% 80% at 50% 0%, rgba(139,92,246,0.15), rgba(34,211,238,0.06) 60%, transparent 100%),
+                  linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .badge-filter { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); }
+    .price { font-variant-numeric: tabular-nums; }
+
+    /* Tarjetas curso */
+    .course-card { background: #0b1220; border: 1px solid rgba(255,255,255,.08); border-radius: .85rem; overflow: hidden; }
+    .course-thumb { aspect-ratio: 16/9; background-size: cover; background-position: center; }
+    .course-body { padding: 1rem 1rem 1.25rem; }
+    .pill { font-size: .75rem; padding: .25rem .5rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); }
+    .muted { color: #94a3b8; }
+    .divider { height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent); margin:.5rem 0 .75rem; }
+
+    /* Animaciones suaves */
+    @media (prefers-reduced-motion: no-preference){
+      .course-card { transition: transform .2s ease, box-shadow .2s ease; }
+      .course-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+      .fade-up { opacity:0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+      .fade-up.is-visible { opacity:1; transform:none; }
+    }
+
+    /* Paginación */
+    .pagination .page-link { background: transparent; border-color: rgba(255,255,255,.15); }
+    .pagination .page-item.active .page-link { background: #0b1584; border-color: #0b1584; }
+
+    /* Helpers */
+    .w-28 { width: 7rem; }
+  </style>
+</head>
+<body class="bg-dark text-light">
+  <!-- NAVBAR (igual estructura y guards; rutas relativas desde /pages) -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-opacity-75 bg-black border-bottom border-secondary fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="../index.html"><i class="bi bi-music-note-beamed me-2"></i>SoundSeeker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" data-nav="home" href="../index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="about" href="./about.html">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="tutores" href="./tutores.html">Tutores</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="instrumentos" href="./instrumentos.html">Instrumentos</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="pedales" href="./pedales.html">Pedales</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="news" href="./news.html">Noticias</a></li>
+
+          <!-- visible solo para invitados -->
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./login.html">Login</a></li>
+          <li class="nav-item" data-guard="guest"><a class="nav-link" href="./register.html">Registro</a></li>
+
+          <!-- visible para user y admin -->
+          <li class="nav-item" data-guard="user"><a class="nav-link" href="./cuenta.html">Mi cuenta</a></li>
+
+          <!-- visible solo para admin -->
+          <li class="nav-item" data-guard="admin"><a class="nav-link" href="./publicar.html">Publicar</a></li>
+
+          <!-- badge usuario -->
+          <li class="nav-item"><span class="nav-link disabled small">👤 <span data-user-badge>Visitante</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO compacto -->
+  <header class="hero-compact pt-5" style="margin-top:56px">
+    <div class="container py-4">
+      <nav aria-label="breadcrumb" class="small">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a class="link-secondary" href="../index.html">Inicio</a></li>
+          <li class="breadcrumb-item active text-light" aria-current="page">Cursos</li>
+        </ol>
+      </nav>
+      <div class="d-flex flex-wrap align-items-end justify-content-between gap-3">
+        <div>
+          <h1 class="h2 mb-1 fw-bold">Cursos</h1>
+          <p class="mb-0 text-secondary">Encuentra cursos prácticos de <strong>guitarra</strong> y <strong>bajo</strong> en Huechuraba.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge badge-filter rounded-pill"><i class="bi bi-geo me-1"></i> Huechuraba</span>
+          <span class="badge badge-filter rounded-pill"><i class="bi bi-award me-1"></i> Tutores verificados</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <!-- Filtros -->
+    <section class="card-dark p-3 p-lg-4 rounded-4 mb-4">
+      <form id="filterForm" class="row g-3 align-items-end">
+        <div class="col-12 col-md-4">
+          <label class="form-label small text-secondary">Buscar</label>
+          <input id="q" type="search" class="form-control" placeholder="Guitarra eléctrica, técnica púa, slap, armonía…">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Instrumento</label>
+          <select id="instrumento" class="form-select">
+            <option value="">Todos</option>
+            <option value="guitarra">Guitarra</option>
+            <option value="bajo">Bajo</option>
+            <option value="teoria">Teoría</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Nivel</label>
+          <select id="nivel" class="form-select">
+            <option value="">Todos</option>
+            <option value="inicio">Inicio</option>
+            <option value="intermedio">Intermedio</option>
+            <option value="avanzado">Avanzado</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Modalidad</label>
+          <select id="modalidad" class="form-select">
+            <option value="">Cualquiera</option>
+            <option value="presencial">Presencial</option>
+            <option value="online">Online</option>
+            <option value="mixto">Mixto</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Precio máx. (CLP)</label>
+          <input id="precio" type="number" class="form-control" min="0" step="5000" placeholder="30000">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small text-secondary">Ordenar</label>
+          <select id="orden" class="form-select">
+            <option value="relevancia">Relevancia</option>
+            <option value="precio_asc">Precio ↑</option>
+            <option value="precio_desc">Precio ↓</option>
+            <option value="duracion_desc">Mayor duración</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2 d-grid">
+          <button type="button" id="btnReset" class="btn btn-outline-light"><i class="bi bi-eraser me-1"></i> Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Result count + pills activas -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div><span id="resultCount" class="text-secondary small">0 resultados</span></div>
+      <div id="activeFilters" class="d-flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- GRID cursos -->
+    <section id="gridCursos" class="row g-3">
+      <!-- Tarjetas generadas por JS a partir de dataset local -->
+    </section>
+
+    <!-- Paginación -->
+    <nav class="mt-4">
+      <ul id="paginador" class="pagination justify-content-center"></ul>
+    </nav>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-top border-secondary mt-5 py-4">
+    <div class="container small text-secondary d-flex flex-wrap gap-2 justify-content-between">
+      <span>© 2025 SoundSeeker</span>
+      <div class="d-flex gap-3">
+        <a class="link-secondary" href="./terminos.html">Términos</a>
+        <a class="link-secondary" href="./faq.html">FAQ</a>
+        <a class="link-secondary" href="./ayuda.html">Ayuda</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/storage.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  // ---------- Dataset local (puedes reemplazar por fetch a tu backend) ----------
+  const CURSOS = [
+    {
+      id: 'c1',
+      titulo: 'Guitarra Eléctrica: Rock de Cero a Riff',
+      tutor: 'Marco Vidal',
+      instrumento: 'guitarra',
+      nivel: 'inicio',
+      modalidad: 'presencial',
+      duracion_h: 10,
+      precio: 25000,
+      comuna: 'Huechuraba',
+      thumb: '../img/cursos/gtr-rock.jpg',
+      tags: ['púa', 'rítmica', 'power chords']
+    },
+    {
+      id: 'c2',
+      titulo: 'Bajo: Técnica de Slap Intensivo',
+      tutor: 'Constanza Fuentes',
+      instrumento: 'bajo',
+      nivel: 'avanzado',
+      modalidad: 'mixto',
+      duracion_h: 8,
+      precio: 35000,
+      comuna: 'Huechuraba',
+      thumb: '../img/cursos/bass-slap.jpg',
+      tags: ['slap', 'ghost notes', 'groove']
+    },
+    {
+      id: 'c3',
+      titulo: 'Armonía aplicada para Guitarra',
+      tutor: 'Daniel Rivas',
+      instrumento: 'teoria',
+      nivel: 'intermedio',
+      modalidad: 'online',
+      duracion_h: 12,
+      precio: 20000,
+      comuna: 'Huechuraba',
+      thumb: '../img/cursos/harmony.jpg',
+      tags: ['armonía', 'triadas', 'progresiones']
+    },
+    {
+      id: 'c4',
+      titulo: 'Bajo para Principiantes',
+      tutor: 'Lina Muñoz',
+      instrumento: 'bajo',
+      nivel: 'inicio',
+      modalidad: 'presencial',
+      duracion_h: 6,
+      precio: 18000,
+      comuna: 'Huechuraba',
+      thumb: '../img/cursos/bass-begin.jpg',
+      tags: ['mano derecha', 'tiempos', 'afinación']
+    },
+    {
+      id: 'c5',
+      titulo: 'Guitarra Fingerstyle: Texturas y Arpegios',
+      tutor: 'Felipe Araya',
+      instrumento: 'guitarra',
+      nivel: 'intermedio',
+      modalidad: 'online',
+      duracion_h: 10,
+      precio: 28000,
+      comuna: 'Huechuraba',
+      thumb: '../img/cursos/fingerstyle.jpg',
+      tags: ['fingerpicking', 'armonía', 'dinámica']
+    },
+    {
+      id: 'c6',
+      titulo: 'Improvisación Modal para Guitarra',
+      tutor: 'Paula Riquelme',
+      instrumento: 'guitarra',
+      nivel: 'avanzado',
+      modalidad: 'mixto',
+      duracion_h: 9,
+      precio: 42000,
+      comuna: 'Huechuraba',
+      thumb: '../img/cursos/modal.jpg',
+      tags: ['modos', 'fraseo', 'ear training']
+    }
+  ];
+
+  // ---------- Utilidades ----------
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const fmtCLP = v => new Intl.NumberFormat('es-CL', { style:'currency', currency:'CLP', maximumFractionDigits:0 }).format(v);
+
+  // ---------- Estado ----------
+  const state = {
+    q: '', instrumento: '', nivel: '', modalidad: '', precio: '', orden: 'relevancia',
+    page: 1, perPage: 6
+  };
+
+  // ---------- Filtros ----------
+  function applyFilters() {
+    let arr = CURSOS.slice();
+
+    // Texto
+    if (state.q) {
+      const q = state.q.toLowerCase();
+      arr = arr.filter(c =>
+        c.titulo.toLowerCase().includes(q) ||
+        c.tutor.toLowerCase().includes(q) ||
+        (c.tags || []).some(t => t.toLowerCase().includes(q))
+      );
+    }
+    if (state.instrumento) arr = arr.filter(c => c.instrumento === state.instrumento);
+    if (state.nivel)       arr = arr.filter(c => c.nivel === state.nivel);
+    if (state.modalidad)   arr = arr.filter(c => c.modalidad === state.modalidad);
+    if (state.precio)      arr = arr.filter(c => c.precio <= Number(state.precio));
+
+    // Orden
+    switch (state.orden) {
+      case 'precio_asc':  arr.sort((a,b)=>a.precio-b.precio); break;
+      case 'precio_desc': arr.sort((a,b)=>b.precio-a.precio); break;
+      case 'duracion_desc': arr.sort((a,b)=>b.duracion_h-a.duracion_h); break;
+      default: /* relevancia = sin cambios */ break;
+    }
+
+    return arr;
+  }
+
+  // ---------- Render tarjetas ----------
+  function renderGrid(items) {
+    const grid = $('#gridCursos');
+    grid.innerHTML = '';
+
+    const start = (state.page-1) * state.perPage;
+    const pageItems = items.slice(start, start + state.perPage);
+
+    if (!pageItems.length) {
+      grid.innerHTML = `<div class="col-12 text-center text-secondary py-5">No se encontraron cursos con los filtros seleccionados.</div>`;
+      return;
+    }
+
+    for (const c of pageItems) {
+      const col = document.createElement('div');
+      col.className = 'col-12 col-md-6 col-lg-4';
+
+      const thumb = c.thumb || '../img/cursos/placeholder.jpg';
+      col.innerHTML = `
+        <article class="course-card hover-lift h-100 d-flex flex-column">
+          <div class="course-thumb" style="background-image:url('${thumb}')"></div>
+          <div class="course-body d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <h3 class="h5 mb-1">${c.titulo}</h3>
+              <span class="pill ms-2 text-nowrap"><i class="bi bi-clock me-1"></i>${c.duracion_h}h</span>
+            </div>
+            <div class="muted small mb-2"><i class="bi bi-person-video2 me-1"></i>${c.tutor}</div>
+            <div class="d-flex gap-2 flex-wrap small mb-2">
+              <span class="pill"><i class="bi bi-music-note-beamed me-1"></i>${c.instrumento}</span>
+              <span class="pill"><i class="bi bi-layer-forward me-1"></i>${c.nivel}</span>
+              <span class="pill"><i class="bi bi-geo me-1"></i>${c.comuna}</span>
+              <span class="pill"><i class="bi bi-wifi me-1"></i>${c.modalidad}</span>
+            </div>
+            <div class="divider"></div>
+            <div class="d-flex align-items-center justify-content-between mt-auto">
+              <div class="price fw-bold">${fmtCLP(c.precio)}</div>
+              <div class="d-flex gap-2">
+                <!-- Para invitados: enviar a login -->
+                <a class="btn btn-outline-light btn-sm" data-guard="guest" href="./login.html">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                </a>
+                <!-- Para usuarios logueados: inscribirse -->
+                <button class="btn btn-primary btn-sm" data-guard="user" data-course-id="${c.id}">
+                  <i class="bi bi-check2-circle me-1"></i> Inscribirme
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+      grid.appendChild(col);
+    }
+  }
+
+  // ---------- Paginación ----------
+  function renderPager(total) {
+    const pages = Math.max(1, Math.ceil(total / state.perPage));
+    const ul = $('#paginador');
+    ul.innerHTML = '';
+
+    function li(page, label=page, active=false, disabled=false){
+      const li = document.createElement('li');
+      li.className = 'page-item' + (active?' active':'') + (disabled?' disabled':'');
+      li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+      if (!disabled) {
+        li.querySelector('a').addEventListener('click', e=>{
+          e.preventDefault();
+          state.page = page;
+          update();
+          window.scrollTo({ top: document.querySelector('main').offsetTop - 56, behavior: 'smooth' });
+        });
+      }
+      ul.appendChild(li);
+    }
+
+    li(Math.max(1, state.page-1), '«', false, state.page===1);
+    for (let p=1; p<=pages; p++){
+      li(p, String(p), p===state.page);
+    }
+    li(Math.min(pages, state.page+1), '»', false, state.page===pages);
+  }
+
+  // ---------- Pills de filtros activos ----------
+  function renderActiveFilters(){
+    const wrap = $('#activeFilters');
+    wrap.innerHTML = '';
+    const add = (label, onClear) => {
+      const span = document.createElement('span');
+      span.className = 'badge badge-filter rounded-pill';
+      span.innerHTML = `${label} <button type="button" class="btn btn-sm btn-link text-light text-decoration-none ms-1 p-0"><i class="bi bi-x-circle"></i></button>`;
+      span.querySelector('button').addEventListener('click', onClear);
+      wrap.appendChild(span);
+    };
+    if (state.q) add(`"${state.q}"`, ()=>{ $('#q').value=''; state.q=''; state.page=1; update(); });
+    if (state.instrumento) add(state.instrumento, ()=>{ $('#instrumento').value=''; state.instrumento=''; state.page=1; update(); });
+    if (state.nivel) add(state.nivel, ()=>{ $('#nivel').value=''; state.nivel=''; state.page=1; update(); });
+    if (state.modalidad) add(state.modalidad, ()=>{ $('#modalidad').value=''; state.modalidad=''; state.page=1; update(); });
+    if (state.precio) add(`≤ ${fmtCLP(state.precio)}`, ()=>{ $('#precio').value=''; state.precio=''; state.page=1; update(); });
+  }
+
+  // ---------- Actualizar UI ----------
+  function update(){
+    const items = applyFilters();
+    const total = items.length;
+    $('#resultCount').textContent = `${total} resultado${total===1?'':'s'}`;
+    renderActiveFilters();
+
+    // Ajustar página si quedó fuera de rango
+    const pages = Math.max(1, Math.ceil(total / state.perPage));
+    if (state.page > pages) state.page = pages;
+
+    renderGrid(items);
+    renderPager(total);
+    revealOnScroll();
+  }
+
+  // ---------- Eventos ----------
+  $('#q').addEventListener('input', e => { state.q = e.target.value.trim(); state.page=1; update(); });
+  $('#instrumento').addEventListener('change', e => { state.instrumento = e.target.value; state.page=1; update(); });
+  $('#nivel').addEventListener('change', e => { state.nivel = e.target.value; state.page=1; update(); });
+  $('#modalidad').addEventListener('change', e => { state.modalidad = e.target.value; state.page=1; update(); });
+  $('#precio').addEventListener('input', e => { state.precio = e.target.value; state.page=1; update(); });
+  $('#orden').addEventListener('change', e => { state.orden = e.target.value; state.page=1; update(); });
+  $('#btnReset').addEventListener('click', () => {
+    ['q','instrumento','nivel','modalidad','precio','orden'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = '';
+    });
+    Object.assign(state, { q:'', instrumento:'', nivel:'', modalidad:'', precio:'', orden:'relevancia', page:1 });
+    update();
+  });
+
+  // ---------- Inscripción (demo) ----------
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-guard="user"][data-course-id]');
+    if (!btn) return;
+    const id = btn.getAttribute('data-course-id');
+    const curso = CURSOS.find(c=>c.id===id);
+    if (!curso) return;
+    // Aquí puedes integrar con tu API; por ahora, demo:
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-check2"></i> Inscrito';
+  });
+
+  // ---------- Revelar .fade-up ----------
+  function revealOnScroll(){
+    const els = $$('.fade-up:not(.is-visible)');
+    if (!('IntersectionObserver' in window) || !els.length) {
+      els.forEach(e => e.classList.add('is-visible'));
+      return;
+    }
+    const io = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: .1 });
+    els.forEach(el=>io.observe(el));
+  }
+
+  // ---------- Init ----------
+  update();
+  </script>
+</body>
+</html>
